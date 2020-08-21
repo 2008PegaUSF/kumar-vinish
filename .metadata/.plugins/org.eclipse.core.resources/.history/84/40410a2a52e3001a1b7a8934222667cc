@@ -1,0 +1,42 @@
+package CoreJavaAssignment;
+
+public class MyMethods {
+	
+	//Question 2: Display First 25 Fibonacci Numbers
+	
+	
+	//Question 3: Reverse a string without a temporary variable
+	public void q3(String s) {
+		//Create character array and input string
+		char[] string = s.toCharArray();
+		//Use for loop to print array from last element to first element, hence "reversing" the string
+		for(int i = string.length; i > 0; i--) {
+			System.out.print(string[i-1]);
+		}
+	}
+	
+	//Question 4: Find N Factorial
+	public void q4(int n) {
+		int factorial = 1;
+		//Handle factorial for 0! and 1!
+		if(n==0 || n==1) {
+			factorial = 1;
+		} else {
+			//Handle factorial for n >= 2
+			for(int i=1; i<n; i++) {
+				factorial = factorial*(i+1);
+			}
+		}
+		System.out.println(factorial);
+	}
+	
+	//Question 5: Accept a string and an index and return a substring between 0 and index-1
+	public void q5(String str, Integer idx) {
+		//Create character array and input string
+		char[] string = str.toCharArray();
+		//Use loop to print substring from index 0 to index idx-1
+		for(int i=0; i<idx; i++) {
+			System.out.print(string[i]);
+		}
+	}
+}

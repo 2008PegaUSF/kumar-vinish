@@ -1,0 +1,17 @@
+package CoreJavaAssignment;
+
+public class Driver {
+
+	public static void main(String[] args) {
+		
+		MyMethods o = new MyMethods();
+		
+		//Question 3
+		o.q3("hot potato");
+		
+		//Question 4
+		//System.out.print("Factorial of 4 is ");
+		//o.q4(4);
+		
+	}
+}
