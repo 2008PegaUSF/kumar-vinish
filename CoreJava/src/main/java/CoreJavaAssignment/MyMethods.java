@@ -1,5 +1,11 @@
 package CoreJavaAssignment;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import Package2.Floats;
+
 public class MyMethods {
 	
 	//Question 1: Bubble Sort
@@ -23,10 +29,10 @@ public class MyMethods {
 	
 	public void displayArray(int array[]) {
 		int arrayLength = array.length; 
-        for (int i=0; i<arrayLength; i++) {
+		for (int i=0; i<arrayLength; i++) {
         	System.out.print(array[i] + " "); 
-        }
-        System.out.println(); 
+		}
+		System.out.println(); 
 	}
 	
 	//Question 2: Display First 25 Fibonacci Numbers
@@ -38,7 +44,6 @@ public class MyMethods {
 			int nextFib = a+b;
 			a=b;
 			b=nextFib;
-			
 		}
 	}
 	
@@ -97,10 +102,61 @@ public class MyMethods {
 	
 	
 	//Question 8: Store strings in an ArrayList and save palindromes in a different ArrayList
-	
+	public void q8() {
+		ArrayList<String> original = new ArrayList<String>();
+		ArrayList<String> reversed = new ArrayList<String>();
+		ArrayList<String> palindromes = new ArrayList<String>();
+		original.add("karan");
+		original.add("madam");
+		original.add("tom");
+		original.add("civic");
+		original.add("radar");
+		original.add("jimmy");
+		original.add("kayak");
+		original.add("john");
+		original.add("refer");
+		original.add("billy");
+		original.add("dad");
+		for(int i=0; i<original.size(); i++) {
+			StringBuilder reversedStringBuilder = new StringBuilder();
+			reversedStringBuilder.append(original.get(i));
+			reversedStringBuilder = reversedStringBuilder.reverse();
+			String reversedString = reversedStringBuilder.toString();
+			reversed.add(reversedString);
+			if(reversed.get(i).equals(original.get(i))) {
+				palindromes.add(reversed.get(i));
+			}
+		}
+		System.out.println(palindromes);
+		
+	}
 	
 	//Question 9: Create an ArrayList with numbers 1-100 and print out all primes
-	
+	public void q9() {
+		ArrayList<Integer> array = new ArrayList<Integer>();
+		for(int i=1; i<101; i++) {
+			array.add(i);
+		}
+		for(int j=1; j<100; j++) {
+			int a = array.get(j);
+			boolean isPrime = true;
+			if(a==1){
+				isPrime = false;
+			} else if(a==2) {
+				isPrime = true;
+			} else {
+				for(int k=2; k<a; k++) {
+					if(a%k == 0) {
+						isPrime = false;
+					} 
+				}
+			}
+			if(isPrime == true) {
+				System.out.println(a);
+			}
+		}
+		//System.out.println(array);
+	}
 	
 	//Question 10: Find the minimum of two numbers using ternary operators
 	public void q10(int a, int b) {
@@ -110,16 +166,53 @@ public class MyMethods {
 	}
 	
 	//Question 11: Access two float-variables from a class in another package
-	
+	public void q11() {
+		float a = Floats.a;
+		float b = Floats.b;
+		System.out.println(a + " and " + b);
+	}
 	
 	//Question 12: Store numbers 1-100 in an array and print out all even numbers using enhanced for loop
-	
+	public void q12() {
+		int[] array1 = new int[100];
+		for(int i=0; i<100; i++) {
+			array1[i] = i+1;
+		}
+		for(int number : array1) {
+			if(number % 2 == 0) {
+				System.out.println(number);
+			}
+		}
+	}
 	
 	//Question 13: Display triangle of 0's and 1's, do not use group of print statements
 	
 	
 	//Question 14: Demonstrate a switch case
-	
+	public void q14() {
+		Scanner q14Scanner = new Scanner(System.in);
+		System.out.println("Enter Case Number: 1, 2, or 3");
+		int scannerInput = q14Scanner.nextInt();
+		switch(scannerInput) {
+			case 1:
+				Scanner q14Case1Scanner = new Scanner(System.in);
+				System.out.println("Find square root of:");
+				int num = q14Case1Scanner.nextInt();
+				System.out.println(Math.sqrt(num));
+				break;
+			case 2:
+				LocalDate todaysDate = LocalDate.now();
+				System.out.println(todaysDate);
+				break;
+			case 3:
+				String learning = "I am learning Core Java";
+				String[] learningArray = learning.split(" ");
+				for(int i=0; i<learningArray.length; i++) {
+					System.out.println(learningArray[i]);
+				}
+				System.out.println("String split successfully");
+		}
+	}
 	
 	//Question 15: Define an interface with math operators, implement them in a different class
 	
@@ -128,13 +221,67 @@ public class MyMethods {
 	
 	
 	//Question 17: Calculate interest using principal, rate, and time entered with Scanner class
-	
+	public void q17() {
+		Scanner q17Scanner = new Scanner(System.in);
+		System.out.println("Interest Calculator");
+		System.out.println("What is your principal?");
+		double principal = q17Scanner.nextDouble();
+		System.out.println("What is your percent interest rate?");
+		double rate = q17Scanner.nextDouble();
+		System.out.println("How many years has your interest been accumulating?");
+		double time = q17Scanner.nextDouble();
+		double adjustedRate = rate/100;
+		double interest = principal*adjustedRate*time;
+		System.out.println("Your accumulated interest is " + interest);
+	}
 	
 	//Question 18: Write a program using a subclass that inherits from a superclass
 	
 	
 	//Question 19: Create ArrayList, insert numbers 1-10, display the ArrayList, display sum of even numbers, display sum of odd numbers, and remove prime numbers and display ArrayList again
-	
+	public void q19() {
+		ArrayList<Integer> integerArray = new ArrayList<Integer>();
+		//ArrayList<Integer> evenIntegers = new ArrayList<Integer>();
+		//ArrayList<Integer> oddIntegers = new ArrayList<Integer>();
+		int evenSum = 0;
+		int oddSum = 0;
+		for(int i=0; i<10; i++) {
+			integerArray.add(i+1);
+		}
+		for(int j=0; j<integerArray.size(); j++) {
+			if(integerArray.get(j)%2 == 0) {
+				evenSum = evenSum + integerArray.get(j);
+			} else {
+				oddSum = oddSum + integerArray.get(j);
+			}
+		}
+		System.out.println("Original ArrayList: " + integerArray);
+		System.out.println("Sum of Even Numbers: " + evenSum);
+		System.out.println("Sum of Odd Numbers: " + oddSum);
+		for(int k=0; k<integerArray.size(); k++) {
+			int a = integerArray.get(k);
+			boolean isPrime = true;
+			if(a==1) {
+				isPrime = false;
+			} else if(a==2) {
+				isPrime = true;
+			} else {
+				for(int b=2; b<a; b++) {
+					if(a%b == 0) {
+						isPrime = false;
+					}
+				}
+			}
+			if(isPrime == true) {
+				integerArray.remove(k);
+				k--;
+			}
+		}
+		System.out.println("ArrayList after removing prime numbers: " + integerArray);
+	}
 	
 	//Question 20: Read from Data.txt file and print out information to screen
+	public void q20(String file) {
+		
+	}
 }
