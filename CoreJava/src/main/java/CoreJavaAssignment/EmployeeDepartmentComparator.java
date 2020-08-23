@@ -2,6 +2,7 @@ package CoreJavaAssignment;
 
 import java.util.Comparator;
 
+//class to compare employee departments, implements Comparator interface and defines compare method
 public class EmployeeDepartmentComparator implements Comparator<EmployeeCreator>{
 
 	public int compare(EmployeeCreator e1, EmployeeCreator e2) {
@@ -9,5 +10,4 @@ public class EmployeeDepartmentComparator implements Comparator<EmployeeCreator>
 		//System.out.println(departmentCompare);
 		return departmentCompare;
 	}
-
 }

@@ -83,10 +83,11 @@ public class Driver {
 		//o.q19();
 		
 		//Question 20
-		try{
+		//try catch block used to ensure file is found before running method
+		/*try{
 			o.q20("Data.txt");
 		} catch(FileNotFoundException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 }
