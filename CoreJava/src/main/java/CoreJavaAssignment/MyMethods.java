@@ -1,7 +1,10 @@
 package CoreJavaAssignment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import Package2.Floats;
@@ -27,6 +30,7 @@ public class MyMethods {
 		}
 	}
 	
+	//
 	public void displayArray(int array[]) {
 		int arrayLength = array.length; 
 		for (int i=0; i<arrayLength; i++) {
@@ -103,20 +107,9 @@ public class MyMethods {
 	
 	//Question 8: Store strings in an ArrayList and save palindromes in a different ArrayList
 	public void q8() {
-		ArrayList<String> original = new ArrayList<String>();
+		ArrayList<String> original = new ArrayList<String>(Arrays.asList("karan", "madam", "tom", "civic", "radar", "jimmy", "kayak", "john", "refer", "billy", "did"));
 		ArrayList<String> reversed = new ArrayList<String>();
 		ArrayList<String> palindromes = new ArrayList<String>();
-		original.add("karan");
-		original.add("madam");
-		original.add("tom");
-		original.add("civic");
-		original.add("radar");
-		original.add("jimmy");
-		original.add("kayak");
-		original.add("john");
-		original.add("refer");
-		original.add("billy");
-		original.add("dad");
 		for(int i=0; i<original.size(); i++) {
 			StringBuilder reversedStringBuilder = new StringBuilder();
 			reversedStringBuilder.append(original.get(i));
@@ -128,7 +121,6 @@ public class MyMethods {
 			}
 		}
 		System.out.println(palindromes);
-		
 	}
 	
 	//Question 9: Create an ArrayList with numbers 1-100 and print out all primes
@@ -215,7 +207,7 @@ public class MyMethods {
 	}
 	
 	//Question 15: Define an interface with math operators, implement them in a different class
-	
+	//Methods implemented in Calculator class
 	
 	//Question 16: Display number of characters in a string input, string should be entered using (String [] args)
 	
@@ -281,7 +273,16 @@ public class MyMethods {
 	}
 	
 	//Question 20: Read from Data.txt file and print out information to screen
-	public void q20(String file) {
-		
+	public void q20(String path) throws FileNotFoundException {
+		File information = new File(path);
+		Scanner infoScanner = new Scanner(information);
+		while(infoScanner.hasNextLine()) {
+			String rawInfo = infoScanner.nextLine();
+			String[] categorizedInfo = rawInfo.split(":");
+			System.out.println("Name: " + categorizedInfo[0] + " " + categorizedInfo[1]);
+			System.out.println("Age: " + categorizedInfo[2] + " years");
+			System.out.println("State: " + categorizedInfo[3] + " State");
+			System.out.println("");
+		}
 	}
 }

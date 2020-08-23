@@ -1,10 +1,13 @@
 package CoreJavaAssignment;
 
+import java.io.FileNotFoundException;
+
 public class Driver {
 
 	public static void main(String[] args) {
 		
 		MyMethods o = new MyMethods();
+		Calculator c = new Calculator();
 		
 		//Question 1
 		//int[] array = {8,4,6,2,7,3,5};
@@ -30,7 +33,7 @@ public class Driver {
 		//Question 7
 		
 		//Question 8
-		o.q8();
+		//o.q8();
 		
 		//Question 9
 		//o.q9();
@@ -50,17 +53,25 @@ public class Driver {
 		//o.q14();
 		
 		//Question 15
+		//c.division(8, 64);
 		
 		//Question 16
+		
 		
 		//Question 17
 		//o.q17();
 		
 		//Question 18
+		//Methods implemented in CaseChecker Class
 		
 		//Question 19
 		//o.q19();
 		
 		//Question 20
+		/*try{
+			o.q20("Dat.txt");
+		} catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}*/
 	}
 }
