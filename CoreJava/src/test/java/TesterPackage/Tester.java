@@ -135,12 +135,12 @@ public class Tester {
 		assertArrayEquals(expected.toArray(), actual.toArray());
 	}
 	
-	/*@Test
+	@Test
 	public void testQ13() {
 		String expected = "0 1 0 1 0 1 0 1 0 1 ";
 		String actual = o.q13();
 		Assertions.assertEquals(expected, actual);
-	}*/
+	}
 	
 	@Test
 	public void testQ14Case1() {
