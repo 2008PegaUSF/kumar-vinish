@@ -11,6 +11,19 @@ import Package2.Floats;
 
 public class MyMethods {
 	
+	private String IntArrayToString(int arr[]) {
+		String s = "[";
+		
+		for(int i = 0; i < arr.length; i++) {
+			s += arr[i];
+			if(i < arr.length-1) {
+				s += ", ";
+			}
+		}
+		s += "]";
+		return s;
+	}
+	
 	//Question 1: Bubble Sort
 	public void q1(int unsortedArray[]) {
 		//find length of array
@@ -40,29 +53,38 @@ public class MyMethods {
 	}
 	
 	//Question 2: Display First 25 Fibonacci Numbers
-	public void q2(int numberOfFibs) {
+	public int[] q2(int numberOfFibs) {
 		int a = 0;
 		int b = 1;
-		for(int i=1; i<=numberOfFibs; i++) {
-			System.out.println(b);
+		int fib[] = new int[numberOfFibs];
+		fib[0] = 0;
+		fib[1] = 1;
+		for(int i=2; i<numberOfFibs; i++) {
 			int nextFib = a+b;
 			a=b;
 			b=nextFib;
+			fib[i] = b;
 		}
+		//System.out.println(IntArrayToString(fib));
+		return fib;
 	}
 	
 	//Question 3: Reverse a string without a temporary variable
-	public void q3(String s) {
+	public char[] q3(String s) {
 		//Create character array and input string
 		char[] string = s.toCharArray();
+		char[] reversed = new char[string.length];
+		int a = 0;
 		//Use for loop to print array from last element to first element, hence "reversing" the string
 		for(int i = string.length; i > 0; i--) {
-			System.out.print(string[i-1]);
+			reversed[a] = string[i-1];
+			a++;
 		}
+		return reversed;
 	}
 	
 	//Question 4: Find N Factorial
-	public void q4(int n) {
+	public int q4(int n) {
 		int factorial = 1;
 		//Handle factorial for 0! and 1!
 		if(n==0 || n==1) {
@@ -73,21 +95,27 @@ public class MyMethods {
 				factorial = factorial*(i+1);
 			}
 		}
-		System.out.println(factorial);
+		//System.out.println(factorial);
+		return factorial;
 	}
 	
 	//Question 5: Accept a string and an index and return a substring between 0 and index-1
-	public void q5(String str, Integer idx) {
+	public char[] q5(String str, Integer idx) {
 		//Create character array and input string
 		char[] string = str.toCharArray();
 		//Use loop to print substring from index 0 to index idx-1
+		char[] substring = new char[idx];
+		int a = 0;
 		for(int i=0; i<idx; i++) {
-			System.out.print(string[i]);
+			//System.out.print(string[i]);
+			substring[a] = string[i];
+			a++;
 		}
+		return substring;
 	}
 	
 	//Question 6: Determine if a number is even without using the modulus operator
-	public void q6(int i) {
+	public String q6(int i) {
 		//divide initial number by 2
 		int a = i/2;
 		//multiply result by 2
@@ -96,9 +124,11 @@ public class MyMethods {
 		//dividing an even integer by 2 and multiplying result by 2 will give original number
 		//this if statement uses this logic to determine whether or not the original number is even or odd
 		if(b == i) {
-			System.out.println("Number is even!");
+			String even = "Number is even!";
+			return even;
 		} else {
-			System.out.println("Number is odd!");
+			String odd = "Number is odd!";
+			return odd;
 		}
 	}
 	
@@ -151,17 +181,20 @@ public class MyMethods {
 	}
 	
 	//Question 10: Find the minimum of two numbers using ternary operators
-	public void q10(int a, int b) {
+	public String q10(int a, int b) {
 		int minimumValue;
 		minimumValue = (a < b) ? a : b;
-		System.out.println("Minimum value is " + minimumValue);
+		//System.out.println("Minimum value is " + minimumValue);
+		String minimum = "Minimum value is " + minimumValue;
+		return minimum;
 	}
 	
 	//Question 11: Access two float-variables from a class in another package
-	public void q11() {
+	public String q11() {
 		float a = Floats.a;
 		float b = Floats.b;
-		System.out.println(a + " and " + b);
+		String floats = "Floats from Package2.Floats: " + a + " and " + b;
+		return floats;
 	}
 	
 	//Question 12: Store numbers 1-100 in an array and print out all even numbers using enhanced for loop
@@ -213,7 +246,7 @@ public class MyMethods {
 	
 	
 	//Question 17: Calculate interest using principal, rate, and time entered with Scanner class
-	public void q17() {
+	public double q17() {
 		Scanner q17Scanner = new Scanner(System.in);
 		System.out.println("Interest Calculator");
 		System.out.println("What is your principal?");
@@ -225,6 +258,13 @@ public class MyMethods {
 		double adjustedRate = rate/100;
 		double interest = principal*adjustedRate*time;
 		System.out.println("Your accumulated interest is " + interest);
+		return interest;
+	}
+	
+	public double q17Tester(double principal, double rate, double time) {
+		double adjustedRate = rate/100;
+		double interest = principal*adjustedRate*time;
+		return interest;
 	}
 	
 	//Question 18: Write a program using a subclass that inherits from a superclass
