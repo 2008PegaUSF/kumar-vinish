@@ -136,7 +136,7 @@ public class MyMethods {
 	
 	
 	//Question 8: Store strings in an ArrayList and save palindromes in a different ArrayList
-	public void q8() {
+	public ArrayList<String> q8() {
 		ArrayList<String> original = new ArrayList<String>(Arrays.asList("karan", "madam", "tom", "civic", "radar", "jimmy", "kayak", "john", "refer", "billy", "did"));
 		ArrayList<String> reversed = new ArrayList<String>();
 		ArrayList<String> palindromes = new ArrayList<String>();
@@ -150,12 +150,14 @@ public class MyMethods {
 				palindromes.add(reversed.get(i));
 			}
 		}
-		System.out.println(palindromes);
+		//System.out.println(palindromes);
+		return palindromes;
 	}
 	
 	//Question 9: Create an ArrayList with numbers 1-100 and print out all primes
-	public void q9() {
+	public ArrayList<Integer> q9() {
 		ArrayList<Integer> array = new ArrayList<Integer>();
+		ArrayList<Integer> primes = new ArrayList<Integer>();
 		for(int i=1; i<101; i++) {
 			array.add(i);
 		}
@@ -174,10 +176,12 @@ public class MyMethods {
 				}
 			}
 			if(isPrime == true) {
-				System.out.println(a);
+				//System.out.println(a);
+				primes.add(a);			
 			}
 		}
-		//System.out.println(array);
+		return primes;
+		//System.out.println(primes);
 	}
 	
 	//Question 10: Find the minimum of two numbers using ternary operators
@@ -198,20 +202,40 @@ public class MyMethods {
 	}
 	
 	//Question 12: Store numbers 1-100 in an array and print out all even numbers using enhanced for loop
-	public void q12() {
-		int[] array1 = new int[100];
+	public ArrayList<Integer> q12() {
+		int[] array = new int[100];
+		ArrayList<Integer> evens = new ArrayList<Integer>();
 		for(int i=0; i<100; i++) {
-			array1[i] = i+1;
+			array[i] = i+1;
 		}
-		for(int number : array1) {
+		for(int number : array) {
 			if(number % 2 == 0) {
-				System.out.println(number);
+				//System.out.println(number);
+				evens.add(number);
 			}
 		}
+		return evens;
 	}
 	
 	//Question 13: Display triangle of 0's and 1's, do not use group of print statements
-	
+	public String q13() {
+		int a=0;
+		String triangle = new String();
+		for(int i=0; i<4; i++) {
+			for(int j=0; j<=i; j++) {
+				String current = a + " ";
+				triangle = triangle + current;
+				System.out.print(a + " ");
+				if(a==0) {
+					a++;
+				} else {
+					a--;
+				}
+			}
+			System.out.println("");
+		}
+		return triangle;
+	} 
 	
 	//Question 14: Demonstrate a switch case
 	public void q14() {
@@ -232,18 +256,34 @@ public class MyMethods {
 			case 3:
 				String learning = "I am learning Core Java";
 				String[] learningArray = learning.split(" ");
-				for(int i=0; i<learningArray.length; i++) {
-					System.out.println(learningArray[i]);
-				}
-				System.out.println("String split successfully");
+				System.out.println(Arrays.toString(learningArray));
 		}
+	}
+	
+	public double q14Case1Tester(int square) {
+		return Math.sqrt(square);
+	}
+	
+	public LocalDate q14Case2Tester() {
+		LocalDate todaysDate = LocalDate.now();
+		return todaysDate;
+	}
+	
+	public String q14Case3Tester() {
+		String learning = "I am learning Core Java";
+		String[] learningArray = learning.split(" ");
+		return Arrays.toString(learningArray);
 	}
 	
 	//Question 15: Define an interface with math operators, implement them in a different class
 	//Methods implemented in Calculator class
 	
 	//Question 16: Display number of characters in a string input, string should be entered using (String [] args)
-	
+	public int q16(String string) {
+		int length = string.length();
+		//System.out.println(length);
+		return length;
+	}
 	
 	//Question 17: Calculate interest using principal, rate, and time entered with Scanner class
 	public double q17() {
@@ -268,13 +308,11 @@ public class MyMethods {
 	}
 	
 	//Question 18: Write a program using a subclass that inherits from a superclass
-	
+	//Methods implemented in Q18Super, Q18Sub, and Q18Driver classes
 	
 	//Question 19: Create ArrayList, insert numbers 1-10, display the ArrayList, display sum of even numbers, display sum of odd numbers, and remove prime numbers and display ArrayList again
 	public void q19() {
 		ArrayList<Integer> integerArray = new ArrayList<Integer>();
-		//ArrayList<Integer> evenIntegers = new ArrayList<Integer>();
-		//ArrayList<Integer> oddIntegers = new ArrayList<Integer>();
 		int evenSum = 0;
 		int oddSum = 0;
 		for(int i=0; i<10; i++) {
@@ -312,17 +350,141 @@ public class MyMethods {
 		System.out.println("ArrayList after removing prime numbers: " + integerArray);
 	}
 	
+	public int q19ReturnEvenSum() {
+		ArrayList<Integer> integerArray = new ArrayList<Integer>();
+		int evenSum = 0;
+		int oddSum = 0;
+		for(int i=0; i<10; i++) {
+			integerArray.add(i+1);
+		}
+		for(int j=0; j<integerArray.size(); j++) {
+			if(integerArray.get(j)%2 == 0) {
+				evenSum = evenSum + integerArray.get(j);
+			} else {
+				oddSum = oddSum + integerArray.get(j);
+			}
+		}
+		//System.out.println("Original ArrayList: " + integerArray);
+		//System.out.println("Sum of Even Numbers: " + evenSum);
+		//System.out.println("Sum of Odd Numbers: " + oddSum);
+		for(int k=0; k<integerArray.size(); k++) {
+			int a = integerArray.get(k);
+			boolean isPrime = true;
+			if(a==1) {
+				isPrime = false;
+			} else if(a==2) {
+				isPrime = true;
+			} else {
+				for(int b=2; b<a; b++) {
+					if(a%b == 0) {
+						isPrime = false;
+					}
+				}
+			}
+			if(isPrime == true) {
+				integerArray.remove(k);
+				k--;
+			}
+		}
+		return evenSum;
+		//System.out.println("ArrayList after removing prime numbers: " + integerArray);
+	}
+	
+	public int q19ReturnOddSum() {
+		ArrayList<Integer> integerArray = new ArrayList<Integer>();
+		int evenSum = 0;
+		int oddSum = 0;
+		for(int i=0; i<10; i++) {
+			integerArray.add(i+1);
+		}
+		for(int j=0; j<integerArray.size(); j++) {
+			if(integerArray.get(j)%2 == 0) {
+				evenSum = evenSum + integerArray.get(j);
+			} else {
+				oddSum = oddSum + integerArray.get(j);
+			}
+		}
+		//System.out.println("Original ArrayList: " + integerArray);
+		//System.out.println("Sum of Even Numbers: " + evenSum);
+		//System.out.println("Sum of Odd Numbers: " + oddSum);
+		for(int k=0; k<integerArray.size(); k++) {
+			int a = integerArray.get(k);
+			boolean isPrime = true;
+			if(a==1) {
+				isPrime = false;
+			} else if(a==2) {
+				isPrime = true;
+			} else {
+				for(int b=2; b<a; b++) {
+					if(a%b == 0) {
+						isPrime = false;
+					}
+				}
+			}
+			if(isPrime == true) {
+				integerArray.remove(k);
+				k--;
+			}
+		}
+		return oddSum;
+		//System.out.println("ArrayList after removing prime numbers: " + integerArray);
+	}
+	
+	public ArrayList<Integer> q19ReturnNoPrimesArray() {
+		ArrayList<Integer> integerArray = new ArrayList<Integer>();
+		int evenSum = 0;
+		int oddSum = 0;
+		for(int i=0; i<10; i++) {
+			integerArray.add(i+1);
+		}
+		for(int j=0; j<integerArray.size(); j++) {
+			if(integerArray.get(j)%2 == 0) {
+				evenSum = evenSum + integerArray.get(j);
+			} else {
+				oddSum = oddSum + integerArray.get(j);
+			}
+		}
+		//System.out.println("Original ArrayList: " + integerArray);
+		//System.out.println("Sum of Even Numbers: " + evenSum);
+		//System.out.println("Sum of Odd Numbers: " + oddSum);
+		for(int k=0; k<integerArray.size(); k++) {
+			int a = integerArray.get(k);
+			boolean isPrime = true;
+			if(a==1) {
+				isPrime = false;
+			} else if(a==2) {
+				isPrime = true;
+			} else {
+				for(int b=2; b<a; b++) {
+					if(a%b == 0) {
+						isPrime = false;
+					}
+				}
+			}
+			if(isPrime == true) {
+				integerArray.remove(k);
+				k--;
+			}
+		}
+		return integerArray;
+		//System.out.println("ArrayList after removing prime numbers: " + integerArray);
+	}
+	
 	//Question 20: Read from Data.txt file and print out information to screen
-	public void q20(String path) throws FileNotFoundException {
+	public String q20(String path) throws FileNotFoundException {
 		File information = new File(path);
 		Scanner infoScanner = new Scanner(information);
+		String print = new String();
 		while(infoScanner.hasNextLine()) {
 			String rawInfo = infoScanner.nextLine();
-			String[] categorizedInfo = rawInfo.split(":");
-			System.out.println("Name: " + categorizedInfo[0] + " " + categorizedInfo[1]);
-			System.out.println("Age: " + categorizedInfo[2] + " years");
-			System.out.println("State: " + categorizedInfo[3] + " State");
-			System.out.println("");
+			String[] storedInfo = rawInfo.split(":");
+			print = print + "Name: " + storedInfo[0] + " " + storedInfo[1] +"\n" + "Age: " + storedInfo[2] +" years" + "\n" + "State: " + storedInfo[3] + " State" + "\n" + "\n";
+			//System.out.println("Name: " + categorizedInfo[0] + " " + categorizedInfo[1]);
+			//System.out.println("Age: " + categorizedInfo[2] + " years");
+			//System.out.println("State: " + categorizedInfo[3] + " State");
+			//System.out.println("");
 		}
+		System.out.println(print);
+		return print;
 	}
 }
