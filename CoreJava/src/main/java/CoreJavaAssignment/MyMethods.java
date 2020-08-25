@@ -83,7 +83,7 @@ public class MyMethods {
 			fib[i] = b;
 		}
 		//print Fib array to console and return array
-		//System.out.println(IntegerArrayToString(fib));
+		System.out.println(IntegerArrayToString(fib));
 		return fib;
 	}
 	
@@ -97,9 +97,11 @@ public class MyMethods {
 		//Use for loop to print array from last element to first element, hence "reversing" the string, and store reversed string in second char array
 		for(int i = string.length; i > 0; i--) {
 			reversed[a] = string[i-1];
+			System.out.print(reversed[a]);
 			a++;
 		}
-		//return reveresed string
+		//return reversed string
+		//System.out.println(reversed.toString());
 		return reversed;
 	}
 	
@@ -116,7 +118,7 @@ public class MyMethods {
 			}
 		}
 		//print and return factorial
-		//System.out.println(factorial);
+		System.out.println(factorial);
 		return factorial;
 	}
 	
@@ -128,10 +130,11 @@ public class MyMethods {
 		char[] substring = new char[idx];
 		int a = 0;
 		for(int i=0; i<idx; i++) {
-			//System.out.print(string[i]);
+			System.out.print(string[i]);
 			substring[a] = string[i];
 			a++;
 		}
+		System.out.println();
 		return substring;
 	}
 	
@@ -146,9 +149,11 @@ public class MyMethods {
 		//this if statement uses this logic to determine whether or not the original number is even or odd
 		if(b == i) {
 			String even = "Number is even!";
+			System.out.println(even);
 			return even;
 		} else {
 			String odd = "Number is odd!";
+			System.out.println(odd);
 			return odd;
 		}
 	}
@@ -182,7 +187,7 @@ public class MyMethods {
 			}
 		}
 		//print and return palindromes array list
-		//System.out.println(palindromes);
+		System.out.println(palindromes);
 		return palindromes;
 	}
 	
@@ -223,7 +228,7 @@ public class MyMethods {
 			}
 		}
 		//print and return primes array list
-		//System.out.println(primes);
+		System.out.println(primes);
 		return primes;
 	}
 	
@@ -233,7 +238,7 @@ public class MyMethods {
 		//use ternary operator to determine minimum, a represents statement inside parentheses being true, b represents false
 		minimumValue = (a < b) ? a : b;
 		//print and return minimum value
-		//System.out.println("Minimum value is " + minimumValue);
+		System.out.println("Minimum value is " + minimumValue);
 		String minimum = "Minimum value is " + minimumValue;
 		return minimum;
 	}
@@ -245,6 +250,7 @@ public class MyMethods {
 		float b = Floats.b;
 		//print and return floats
 		String floats = "Floats from Package2.Floats: " + a + " and " + b;
+		System.out.println(floats);
 		return floats;
 	}
 	
@@ -265,7 +271,7 @@ public class MyMethods {
 			}
 		}
 		//print and return evens array list
-		//System.out.println(evens)
+		System.out.println(evens);
 		return evens;
 	}
 	
@@ -360,7 +366,7 @@ public class MyMethods {
 		//finds length of input string
 		int length = string.length();
 		//prints and returns string length
-		//System.out.println(length);
+		System.out.println(length);
 		return length;
 	}
 	
@@ -394,7 +400,7 @@ public class MyMethods {
 	}
 	
 	//Question 18: Write a program using a subclass that inherits from a superclass
-	//Methods implemented in Q18Super, Q18Sub, and Q18Driver classes
+	//Methods and Driver implemented in Q18Super, Q18Sub, and Q18Driver classes
 	
 	//Question 19: Create ArrayList, insert numbers 1-10, display the ArrayList, display sum of even numbers, display sum of odd numbers, and remove prime numbers and display ArrayList again
 	public void q19() {
