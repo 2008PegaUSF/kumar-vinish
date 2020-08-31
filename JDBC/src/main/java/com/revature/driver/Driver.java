@@ -10,6 +10,7 @@ public class Driver {
 		try {
 			//adi.getAllAlbums();
 			System.out.println(adi.getAllAlbums());
+			//System.out.println(adi.getAllAlbumsbyArtistId(22));
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}

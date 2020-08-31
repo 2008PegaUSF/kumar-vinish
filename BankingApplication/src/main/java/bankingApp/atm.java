@@ -12,8 +12,10 @@ import java.util.Scanner;
 
 public class atm {
 	
+	//scanner class instantiated
 	Scanner s = new Scanner(System.in);
 	
+	//ArrayLists used for object
 	ArrayList<Customer> custys = new ArrayList<Customer>();
 	ArrayList<Application> apply = new ArrayList<Application>();
 	ArrayList<JointApp> Japps = new ArrayList<JointApp>();
@@ -25,43 +27,54 @@ public class atm {
 	String fname;
 	int funds;
 	
+	//SerializationMethods o = new SerializationMethods();
 	
-	String BAun = "Big Daddy";
-	String BApw = "BigPapa";
+	String BAun = "Big Daddy"; //hardcode BankAdmin Username
+	String BApw = "BigPapa"; //hardcode BankAdmin password
 	
-	String Eu = "Big Mama";
-	String Ep = "BigMa";
+	String Eu = "Big Mama"; //hardcode Employee Username
+	String Ep = "BigMa"; //hardcode Employee password
 	
-	ArrayList<Customer> custList = new ArrayList<Customer>(); 
+	//ArrayLists used to deserialize data to and then iterate over
+	ArrayList<Customer> custList = new ArrayList<Customer>();  
 	ArrayList<Application> appList = new ArrayList<Application>();
 	ArrayList<JointApp> JappList = new ArrayList<JointApp>();
 	
+	//method used to run our Bank Interface
 	public void battery() {
 		sys();
 	}
 	
+	// The heart of our project is built using this if-else if-else branch
 	public void sys() {
 		
-		readfile();
-		readApps();
-		readJA();
-				  
+		
+		readfile(); //used to deserialize customer data
+		readApps(); //used to deserialize normal application data
+		readJA(); ////used to deserialize joint application data
+		
+		//Our "Seed" that begins our decision tree
 		System.out.println("Login as:" + "\n" + "a) Customer" + "\n"
 					+ "b) Employee"+"\n" + "c) Bank Admin" + "\n" 
-					);//seed												
-		String p = s.nextLine(); //stems out
-
-		if (p.equals("a"))  {//branch 1
-			//Customer a = new Customer();
+					);
+		// input users decision into string variable and then use conditionals to branch out to either 3 Users
+		String p = s.nextLine();
+		
+		//Branch 1: Customer
+		if (p.equals("a"))  {
+			//Apply for an account or Login if account has been approved
 			System.out.println("What would you like to do?"+"\n"
 					+"a)Register"+ "\n"
 					+ "b)Login to account" );
+			//reads user input
 			String c1 = s.nextLine();
 			if( c1.equals("a")) {//branch 1a
+				//asks user for what type of account they would like
 				System.out.println("Would you like to apply for an : " + "\n" + " a) Account" 
 									+"\n" + " b) Joint Account");
 				String o1 = s.nextLine();
 				if (o1.equals("a")) {
+					//asks for first name, last name, username, and password info
 					System.out.println("What is your first name?");
 					String fname = s.nextLine();
 					System.out.println("What is your last name?");
@@ -69,26 +82,28 @@ public class atm {
 					System.out.println("Create New Username:");
 					String uname = s.nextLine();
 					System.out.println("Create Password:");
+					//funds is set automatically to $10 because our policy required an amount greater than 0 to open an account
 					int funds = 10;
 					String pw = s.nextLine();
-					apply.add(new Application (fname,lname,uname,pw,funds)); 
-					writeApps(apply);
+					//create new application object and then add to apply list
+					appList.add(new Application (fname,lname,uname,pw,funds)); 
+					//saves application to appplication.txt file
+					writeApps(appList);
+					//Let the user know their application is waiting for approval
 					System.out.println("Your Account Application has been submitted!");
-					sys();
+					sys(); //recall the system
 				} else if (o1.equals("b")) { 
+					// asks for Joint Account user info
 					System.out.println("What is the first account holder's full name?");
 					String fl1 = s.nextLine();
 					System.out.println("What is the second account holder's full name?");
 					String fl2 = s.nextLine();
-					System.out.println("Create Username:"); // figure out how to accept application
+					System.out.println("Create Username:");
 					String uname1 = s.nextLine();
 					System.out.println("Create Password:");
 					int funds = 10;
 					String pw1 = s.nextLine();
-					//System.out.println("Create Second Username:");
-					//String uname2 = s.nextLine();
-					//System.out.println("Create Password for Second User:");
-					//String pw2 = s.nextLine();
+					//instantiates new JointApp Object and adds to Japps
 					Japps.add(new JointApp (fl1, fl2, uname1, pw1, funds)); 
 					writeJA(Japps);
 					System.out.println("Your Joint Account Application has been submitted!");
@@ -96,85 +111,106 @@ public class atm {
 				}
 			} else if(c1.equals("b")) {//branch 1b
 				System.out.println("Input Username: ");
-				String checkUname = s.nextLine();
+				//stores username to string variable
+				//String checkUname = s.nextLine();
 				System.out.println("Input Password: ");
+				//stores password to string variable
 				String checkPwd = s.nextLine();
+				System.out.println(custList.get(3).getPW());
+				System.out.println(checkPwd);
+				//iterate over customer arraylist to check if username and password are correct
 				for (int i = 0 ; i < custList.size(); i++) {
-					if (custList.get(i).getUN().equals(checkUname) && custList.get(i).getPW().equals(checkPwd)) {
-						//Customer $4T = custList.get(i);
-						//int x = indexOf((custList.get(i));
-					 System.out.println("Would you like to:" + "\n" + "a) Withdraw" + "\n" + "b) Deposit" 
+					//if true, then transactions branch is open
+					//if (custList.get(i).getUN().equals(checkUname) && custList.get(i).getPW().equals(checkPwd)) {
+					System.out.println(custList.get(i).getPW());
+					if(findCusty(checkPwd).equals(custList.get(i).getPW())) {
+						//decide transaction type
+						System.out.println("Would you like to:" + "\n" + "a) Withdraw" + "\n" + "b) Deposit" 
 											+"\n"+ "c) Transfer");
-							String c2b = s.nextLine(); 
-							if (c2b.contentEquals("a")) { 
-								//Withdrawal
-								int $ = custList.get(i).get$(); 
-								System.out.println("How much would you like to withdraw?"); 
-								int less$ = Integer.parseInt(s.nextLine()); 
+						String c2b = s.nextLine(); 
+						if (c2b.contentEquals("a")) { 
+							//Withdrawal branch
+							int $ = custList.get(i).get$(); 
+							System.out.println("How much would you like to withdraw?"); 
+							int less$ = Integer.parseInt(s.nextLine()); 
+							//overdraft validation
+							if(less$ <= $) {
 								int newF = $ - less$;
+								//replaces old funds with new funds
 								custList.get(i).setFunds(newF);
+								//Show remaining balance
 								System.out.println("New Balance: $"+custList.get(i).get$());
+								//saves new data to customerlist
 								writefile(custList);
-								
-							} else if (c2b.equals("b")) { 
-								//Deposit
-								int $ = custList.get(i).get$(); //change funds to double
-								System.out.println("How much would you like to Deposit?"); 
-								int plus$ = Integer.parseInt(s.nextLine()); 
-								int newF = $ + plus$;
-								custList.get(i).setFunds(newF);
-								System.out.println("New Balance: $"+custList.get(i).get$());
-								writefile(custList);
-								
-							} else if (c2b.equals("c")){
-								//Transfers
-								System.out.println("Enter Account Username that you will be transferring money to: ");
-								String h = s.nextLine();
-								System.out.println("Enter Account Password that you will be transferring money to: ");
-								String h1 = s.nextLine();
-									for (int t = 0; t < custList.size(); t++ ) {
-										if ((custList.get(t).getUN().equals(h) && custList.get(t).getPW().equals(h1)) && t!=i) {
-											
-											System.out.println("Transfer has begun\n" + "How much money would you like to Transfer?");
-											int m$ = Integer.parseInt(s.nextLine());
-											int newF = custList.get(i).get$() - m$;
-											custList.get(i).setFunds(newF);
-											int nf = custList.get(t).get$() + m$;
-											custList.get(t).setFunds(nf);
-											System.out.println("New Balance for 1st Account: $"+custList.get(i).get$() + "\n"
-															+	"New Balance for 2nd Account: $"+custList.get(t).get$());
-												
-										}
+							} else {
+								//let them know they can't do overdrafts
+								System.out.println("You can't cheat money!"); 
+								sys();
+							}
+						} else if (c2b.equals("b")) { 
+							//Deposit branch
+							int $ = custList.get(i).get$(); //change funds to double
+							System.out.println("How much would you like to Deposit?"); 
+							int plus$ = Integer.parseInt(s.nextLine()); 
+							int newF = $ + plus$;
+							custList.get(i).setFunds(newF);
+							System.out.println("New Balance: $"+custList.get(i).get$());
+							writefile(custList);
+						} else if (c2b.equals("c")){
+							//Transfers branch
+							System.out.println("Enter Account Username that you will be transferring money to: ");
+							String h = s.nextLine();
+							System.out.println("Enter Account Password that you will be transferring money to: ");
+							String h1 = s.nextLine();
+							for (int t = 0; t < custList.size(); t++ ) {
+								if ((custList.get(t).getUN().equals(h) && custList.get(t).getPW().equals(h1)) && t!=i) {
+									System.out.println("Transfer has begun\n" + "How much money would you like to Transfer?");
+									int m$ = Integer.parseInt(s.nextLine());
+									if(m$ <= custList.get(t).get$()) {
+										int newF = custList.get(i).get$() - m$;
+										custList.get(i).setFunds(newF);
+										int nf = custList.get(t).get$() + m$;
+										custList.get(t).setFunds(nf);
+										System.out.println("New Balance for 1st Account: $"+custList.get(i).get$() + "\n"
+														+	"New Balance for 2nd Account: $"+custList.get(t).get$());
+									} else {
+										System.out.println("You're not slick!!!"); //Let them know they can't mess around
+										sys();
 									}
-									writefile(custList);
-							} 
-							sys();
-					} else {
-						System.out.println("You're a thief!!" + "\n" );
+								}
+							}
+							writefile(custList);
+						} 
 						sys();
-					}
+					} 
 				}
+			} else {
+				System.out.println("Invalid input, try again.");
+				sys();
 			}
 		}
 		
 // Employee branch 2		
 		
 		else if(p.equals("b")) {
+			//ask for employee info
 	 		System.out.println("Login in to Employee Account" + "\n" + "What is your Username?");
 	 		String eu = s.nextLine();
 	 		System.out.println("What is your Password?");
 	 		String ep = s.nextLine(); 
-	 		
+	 		//boolean shorthand operator used to validate user information
 	 		if (eu.equals(Eu) && ep.equals(Ep)) {
 	 			System.out.println("Would you like to:" +"\n"+ "a) View Customer Information" + "\n"
 									+ "b) Approve or deny normal applications" + "\n" + "c) Approve or deny joint applications");
 	 			String e1 = s.nextLine();
-	 			if(e1.equals("a")) {
+	 			if(e1.equals("a")) { //View Customer Information branch
 	 					for (int i=0; i< custList.size(); i++){
+	 						//iterates over custList and prints information
 	 						System.out.println(custList.get(i) + "\n");
 	 					} sys();
-	 			} else if(e1.equals("b")) {
+	 			} else if(e1.equals("b")) { //Approve or deny normal applications branch
 	 				System.out.println("List of Normal Accounts to be Approved:");
+	 				//loops through and prints out list of all accounts to be approved with identifying number
 	 				for(int i=0; i<appList.size(); i++) {
 						System.out.println(i+1 + ": " + appList.get(i));
 					}
@@ -182,34 +218,40 @@ public class atm {
 	 				System.out.println("Would you like to:"+ "\n" + "a) Approve Normal Accounts" + "\n" +
 	 						"b) Deny Normal Accounts");
 	 				String d2b = s.nextLine();
-	 				if (d2b.equals("a")) {
-	 					//call approve account
-	 					System.out.println("Enter the number of the account you want to approve from the list above.");
+	 				if (d2b.equals("a")) { // approve normal accounts branch
+	 					//use identifying numbers from prior console print out to identify which application to accept
+	 					System.out.println("Enter the number of the account you want to approve from the list above. Enter 0 if you don't want to approve any accounts.");
 	 					int n = Integer.parseInt(s.nextLine());
+	 					//create employee object
 	 					Employee e = new Employee();
 	 					ArrayList<Application> newApproved = new ArrayList<Application>();
+	 					//employee object calls approve application method, assigns newly approved application to array list
 	 					newApproved = e.approveApplication(appList, n);
-	 					//System.out.println("Account approved!");
+	 					//serializes new list of pending applications
 	 					writeApps(appList);
+	 					//ensures there is an newly approved account to retrieve info from
 	 					if(!newApproved.isEmpty()) {
-	 						Customer newUser = new Customer(newApproved.get(0).getF1(), newApproved.get(0).getL1(), newApproved.get(0).getU1(), newApproved.get(0).getP1(), 10);
-		 					custList.add(newUser);
+	 						//use getter methods to take application data and create a new customer
+	 						Customer newUser = new Customer(newApproved.get(0).getF1(), newApproved.get(0).getL1(), newApproved.get(0).getU1(), newApproved.get(0).getP1(), newApproved.get(0).getFunds());
+		 					//adds new customer to comprehensive customer list
+	 						custList.add(newUser);
+	 						//serializes updated customer list
 		 					writefile(custList);
-		 					//System.out.println(appList);
 	 					}
 	 					
-	 				} else if(d2b.equals("b")){
-	 					//call deny method
-	 					System.out.println("Enter the number of the account you want to deny from the list above.");
+	 				} else if(d2b.equals("b")){ //deny normal accounts branch
+	 					//use identifying numbers from prior console print out to identify which application to deny
+	 					System.out.println("Enter the number of the account you want to deny from the list above. Enter 0 if you don't want to deny any accounts.");
 	 					int n = Integer.parseInt(s.nextLine());
+	 					//create employee object
 	 					Employee e = new Employee();
-	 					ArrayList<Application> newDenied = new ArrayList<Application>();
-	 					newDenied = e.denyApplication(appList, n);
+	 					//ArrayList<Application> newDenied = new ArrayList<Application>();
+	 					//remove denied application from pending applications
+	 					e.denyApplication(appList, n);
+	 					//serialize updated app list
 	 					writeApps(appList);
-	 					//System.out.println(appList);
-	 					//System.out.println("Account denied!");
 	 				} 
-	 			} else if (e1.equals("c")) {
+	 			} else if (e1.equals("c")) { // joint account approval/denial branch, methods work similarly to normal accounts, except uses Japplist instead of applist since different application types have different implementations
 	 				System.out.println("List of Joint Accounts to be Approved:");
 					for(int i=0; i<JappList.size(); i++) {
 						System.out.println(i+1 + ": " + JappList.get(i));
@@ -220,36 +262,30 @@ public class atm {
 	 				String d2b = s.nextLine();
 	 				if (d2b.equals("a")) {
 	 					//call approve account
-	 					System.out.println("Enter the number of the account you want to approve from the list above.");
+	 					System.out.println("Enter the number of the account you want to approve from the list above. Enter 0 if you don't want to approve any accounts.");
 	 					int n = Integer.parseInt(s.nextLine());
 	 					Employee e = new Employee();
 	 					ArrayList<JointApp> newApproved = new ArrayList<JointApp>();
 	 					newApproved = e.approveJointApplication(JappList, n);
-	 					//System.out.println("Account approved!");
 	 					writeJA(JappList);
-	 					Customer newUser = new Customer(newApproved.get(0).getfl1(), newApproved.get(0).getfl2(), newApproved.get(0).getUname(), newApproved.get(0).getPW(), 10);
+	 					Customer newUser = new Customer(newApproved.get(0).getfl1(), newApproved.get(0).getfl2(), newApproved.get(0).getUname(), newApproved.get(0).getPW(), newApproved.get(0).getFunds());
 	 					custList.add(newUser);
 	 					writefile(custList);
-	 					//System.out.println(JappList);
-	 					
 	 				} else if(d2b.equals("b")){
 	 					//call deny method
-	 					System.out.println("Enter the number of the account you want to deny from the list above.");
+	 					System.out.println("Enter the number of the account you want to deny from the list above. Enter 0 if you don't want to deny any accounts.");
 	 					int n = Integer.parseInt(s.nextLine());
 	 					Employee e = new Employee();
-	 					ArrayList<JointApp> newDenied = new ArrayList<JointApp>();
-	 					newDenied = e.denyJointApplication(JappList, n);
+	 					//ArrayList<JointApp> newDenied = new ArrayList<JointApp>();
+	 					e.denyJointApplication(JappList, n);
 	 					writeJA(JappList);
-	 					//System.out.println(appList);
-	 					//System.out.println("Account denied!");
 	 				} 
-	 			} else {
+	 			} else { //if input from scanner is not valid
 	 				System.out.println("Invalid input, try again.");
 	 			}
 	 			sys();
-	 		} else {
+	 		} else { // protects employee account from those without knowledge of password
 	 			System.out.println("You are not Big Mama!!!");
-	 			//sys();
 	 		}
 	 		sys();
 		}
@@ -257,16 +293,17 @@ public class atm {
  // Bank Admin branch 3	
 		
 		else if(p.equals("c")) {
+			//login info for Bank Admin
 			System.out.println("Login in to account" + "\n" + "What is your Username?");
 			String bu = s.nextLine();
 			System.out.println("What is your Password?");
 			String bp = s.nextLine(); 
-			
+			// validates login input, bank admin actions can only be done inside this if block
 			if (bu.equals(BAun) && bp.equals(BApw)) {
 			
 				System.out.println("a) View Accounts" + "\n" + "b) Edits Accounts" + "\n");
 				String d1 = s.nextLine();
-				if(d1.equals("a")) {
+				if(d1.equals("a")) { //View Accounts branch
 					for (int x=0; x < custList.size(); x++){
 						System.out.println(custList.get(x) + "\n");
 						sys();
@@ -274,11 +311,11 @@ public class atm {
 					for(int i=0; i<custList.size(); i++) {
 						System.out.println(i+1 + ": " + custList.get(i));
 					}
-				} else if(d1.contentEquals("b")){
+				} else if(d1.contentEquals("b")){ // Edit Accounts branch
 					System.out.println("Would you like to:"+ "\n" + "a) Approve/Deny Normal Accounts" + "\n" +
 									"b) Transaction" + "\n" +"c) Delete Accounts" + "\n" + "d) Approve/Deny Joint Accounts");
 					String d2 = s.nextLine();
-					if(d2.equals("a")) {
+					if(d2.equals("a")) { //Approve/Deny Normal Accounts branch, same implementation as employee
 						System.out.println("List of Normal Accounts to be Approved:");
 		 				for(int i=0; i<appList.size(); i++) {
 							System.out.println(i+1 + ": " + appList.get(i));
@@ -287,46 +324,42 @@ public class atm {
 						System.out.println("Would you like to:"+ "\n" + "a) Approve Account" + "\n" +
 							"b) Deny Accounts");
 						String d2a = s.nextLine();
-						if (d2a.equals("a")) {
-							//call approve account
-							System.out.println("Enter the number of the account you want to approve from the list above.");
+						if (d2a.equals("a")) { //approve normal accounts branch
+							System.out.println("Enter the number of the account you want to approve from the list above. Enter 0 if you don't want to approve any accounts.");
 		 					int n = Integer.parseInt(s.nextLine());
 		 					Employee e = new Employee();
 		 					ArrayList<Application> newApproved = new ArrayList<Application>();
 		 					newApproved = e.approveApplication(appList, n);
-		 					//System.out.println("Account approved!");
 		 					writeApps(appList);
 		 					if(!newApproved.isEmpty()) {
-		 						Customer newUser = new Customer(newApproved.get(0).getF1(), newApproved.get(0).getL1(), newApproved.get(0).getU1(), newApproved.get(0).getP1(), 10);
+		 						Customer newUser = new Customer(newApproved.get(0).getF1(), newApproved.get(0).getL1(), newApproved.get(0).getU1(), newApproved.get(0).getP1(), newApproved.get(0).getFunds());
 			 					custList.add(newUser);
 			 					writefile(custList);
-			 					//System.out.println(appList);
 		 					}
-						} else if(d2a.equals("b")){
-							System.out.println("Enter the number of the account you want to deny from the list above.");
+						} else if(d2a.equals("b")){ //deny normal accounts branch
+							System.out.println("Enter the number of the account you want to deny from the list above. Enter 0 if you don't want to deny any accounts.");
 		 					int n = Integer.parseInt(s.nextLine());
 		 					Bankadmin ba = new Bankadmin();
-		 					ArrayList<Application> newDenied = new ArrayList<Application>();
-		 					newDenied = ba.denyApplication(appList, n);
+		 					//ArrayList<Application> newDenied = new ArrayList<Application>();
+		 					ba.denyApplication(appList, n);
 		 					writeApps(appList);
-		 					//System.out.println(appList);
-		 					//System.out.println("Account denied!");
-							//System.out.println("Account denied!");
 						}
 						sys();
-					} else if (d2.equals("b")) {
+					} else if (d2.equals("b")) { // Transactions branch
+						//prints out all customers
 						for (int x=0; x < custList.size(); x++){
 							System.out.println(custList.get(x) + "\n");
 						} 
+						//bank admin inputs name of account to edit
 						System.out.println("Input Username of account you would like to make a transaction for.");
 						String ua = s.nextLine();
 						for (int n = 0; n < custList.size(); n++) {
+							//ensures username can be found in customer list
 							if (custList.get(n).getUN().equals(ua)) {
 								System.out.println("Would you like to:" + "\n" + "a) Withdraw" + "\n" + "b) Deposit" 
 										+"\n"+ "c) Transfer");
 								String d3a = s.nextLine(); 
-								if(d3a.contentEquals("a")) {
-									//Withdraw method
+								if(d3a.contentEquals("a")) { //Withdraw branch
 									int $ = custList.get(n).get$(); 
 									System.out.println("How much would you like to withdraw?"); 
 									int less$ = Integer.parseInt(s.nextLine()); 
@@ -335,8 +368,7 @@ public class atm {
 									System.out.println("Remaining Balance: $"+custList.get(n).get$());
 									writefile(custList);
 									sys();
-								} else if (d3a.equals("b")) {
-									//Deposit method
+								} else if (d3a.equals("b")) { //Deposit branch
 									int $ = custList.get(n).get$();
 									System.out.println("How much would you like to Deposit?"); 
 									int plus$ = Integer.parseInt(s.nextLine()); 
@@ -345,8 +377,7 @@ public class atm {
 									System.out.println("New Balance: $"+custList.get(n).get$());
 									writefile(custList);
 									sys();
-								} else if (d3a.equals("c")){
-									//call transfer method
+								} else if (d3a.equals("c")){ //Transfer branch
 									System.out.println("Enter Account Username that you will be transferring money to: ");
 									String h = s.nextLine();
 									for (int t = 0; t < custList.size(); t++ ) {
@@ -368,24 +399,22 @@ public class atm {
 							}
 						}
 						
-					} else if(d2.equals("c")) {
+					} else if(d2.equals("c")) { //Cancel Accounts branch
 						System.out.println("List of Customer Accounts:");
+						//prints out all customer accounts
 						for(int i=0; i<custList.size(); i++) {
 							System.out.println(i+1 + ": " + custList.get(i));
 						}
-						System.out.println("What account would you like to delete?");
+						System.out.println("Which account would you like to delete?");
 						int n = Integer.parseInt(s.nextLine());
+						//uses bank admin integer input to delete account with index n-1
 	 					Bankadmin ba = new Bankadmin();
-	 					ArrayList<Customer> newDeleted = new ArrayList<Customer>();
-	 					newDeleted = ba.cancelAccount(custList, n);
+	 					//ArrayList<Customer> newDeleted = new ArrayList<Customer>();
+	 					//account deleted
+	 					ba.cancelAccount(custList, n);
+	 					//rewrite customer list
 	 					writefile(custList);
-	 					//System.out.println(appList);
-	 					//System.out.println("Account denied!");
-						//System.out.println("Account denied!");
-
-						
-						//System.out.println("Account has been cancelled");
-					} else if(d2.equals("d")) {
+					} else if(d2.equals("d")) { // Approve/Deny joint accounts branch
 						System.out.println("List of Joint Accounts to be Approved:");
 						for(int i=0; i<JappList.size(); i++) {
 							System.out.println(i+1 + ": " + JappList.get(i));
@@ -394,35 +423,29 @@ public class atm {
 		 				System.out.println("Would you like to:"+ "\n" + "a) Approve Joint Accounts" + "\n" +
 		 						"b) Deny Joint Accounts");
 		 				String d2b = s.nextLine();
-		 				if (d2b.equals("a")) {
-		 					//call approve account
-		 					System.out.println("Enter the number of the account you want to approve from the list above.");
+		 				if (d2b.equals("a")) { // approve account branch
+		 					System.out.println("Enter the number of the account you want to approve from the list above. Enter 0 if you don't want to approve any accounts.");
 		 					int n = Integer.parseInt(s.nextLine());
 		 					Bankadmin ba = new Bankadmin();
 		 					ArrayList<JointApp> newApproved = new ArrayList<JointApp>();
 		 					newApproved = ba.approveJointApplication(JappList, n);
-		 					//System.out.println("Account approved!");
 		 					writeJA(JappList);
-		 					Customer newUser = new Customer(newApproved.get(0).getfl1(), newApproved.get(0).getfl2(), newApproved.get(0).getUname(), newApproved.get(0).getPW(), 10);
+		 					Customer newUser = new Customer(newApproved.get(0).getfl1(), newApproved.get(0).getfl2(), newApproved.get(0).getUname(), newApproved.get(0).getPW(), newApproved.get(0).getFunds());
 		 					custList.add(newUser);
 		 					writefile(custList);
-		 					//System.out.println(JappList);
 		 					
-		 				} else if(d2b.equals("b")){
-		 					//call deny method
-		 					System.out.println("Enter the number of the account you want to deny from the list above.");
+		 				} else if(d2b.equals("b")){ //deny account branch
+		 					System.out.println("Enter the number of the account you want to deny from the list above. Enter 0 if you don't want to deny any accounts.");
 		 					int n = Integer.parseInt(s.nextLine());
 		 					Bankadmin ba = new Bankadmin();
-		 					ArrayList<JointApp> newDenied = new ArrayList<JointApp>();
-		 					newDenied = ba.denyJointApplication(JappList, n);
+		 					//ArrayList<JointApp> newDenied = new ArrayList<JointApp>();
+		 					ba.denyJointApplication(JappList, n);
 		 					writeJA(JappList);
-		 					//System.out.println(appList);
-		 					//System.out.println("Account denied!");
 		 				} 
 					}
 					sys();
 				}	
-			} else {
+			} else { //protects bank admin account from users without knowledge of password
 				System.out.println("You are not Big Daddy!");
 			}
 			sys();
@@ -430,11 +453,13 @@ public class atm {
 		s.close();
 	}
 
-	
-	Customer findCusty(String checkPwd) {
-		for(Customer customer : custList) {
+	//password validator
+	public String findCusty(String checkPwd) {
+		//for(Customer customer : custList) {
+		for(int i=0; i<custList.size(); i++) {
+			Customer customer = custList.get(i);
 			if (customer.getPW().equals(checkPwd)){
-				return customer;
+				return customer.getPW();
 			}
 		}
 		return null;
@@ -442,7 +467,8 @@ public class atm {
 	
 //Serialization Methods	
 	
-	public void writefile(ArrayList<Customer> custys) {
+	//serialize customer list
+	public void writefile(ArrayList<Customer> custList) {
 		try {
         	FileOutputStream fos = new FileOutputStream("CustomerData.txt");
         	ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -456,11 +482,12 @@ public class atm {
     	}
 	}
 	
-	public void writeApps(ArrayList<Application> apply) {
+	//serialize normal application list
+	public void writeApps(ArrayList<Application> appList) {
 		try {
 	    	FileOutputStream fos = new FileOutputStream("Applications.txt");
 	    	ObjectOutputStream oos = new ObjectOutputStream(fos);
-	    	oos.writeObject(apply);
+	    	oos.writeObject(appList);
 	    	System.out.println();
 	    	oos.close();
 	    	fos.close();
@@ -470,11 +497,12 @@ public class atm {
 		}
 	}
 	
-	public void writeJA(ArrayList<JointApp> Japps) {
+	//serialize joint application list
+	public void writeJA(ArrayList<JointApp> JappList) {
 		try {
 			FileOutputStream fos = new FileOutputStream("Joint.txt");
 	    	ObjectOutputStream oos = new ObjectOutputStream(fos);
-	    	oos.writeObject(Japps);
+	    	oos.writeObject(JappList);
 	    	System.out.println();
 	    	oos.close();
 	    	fos.close();
@@ -484,6 +512,7 @@ public class atm {
 		}
 	}
 	
+	//deserialize customer list
 	@SuppressWarnings("unchecked")
 	public void readfile() {
 		try {	
@@ -507,6 +536,7 @@ public class atm {
     	}
 	}
 	
+	//deserialize normal application list
 	@SuppressWarnings("unchecked")
 	public void readApps() {
 		try {	
@@ -528,9 +558,9 @@ public class atm {
         	c.printStackTrace();
         	//return;
     	}
-		//return appList;
 	}
 		
+	//deserialize joint application list
 	@SuppressWarnings("unchecked")
 	public void readJA() {
 		ArrayList<JointApp> deSerializedJA = new ArrayList<JointApp>();
@@ -541,7 +571,6 @@ public class atm {
 			JappList = deSerializedJA;
 			ois.close();
 			fis.close();
-			//return JappList;
 	    } 
 	    catch (IOException ioe) {
 	        //ioe.printStackTrace();
@@ -553,6 +582,5 @@ public class atm {
 	        	c.printStackTrace();
 	        	//return;
 	    }
-		//return deSerializedJA;
 	}
 }

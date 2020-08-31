@@ -1,6 +1,7 @@
 package com.revature.daoimpl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,8 +29,18 @@ public class AlbumDaoImpl implements AlbumDao{
 	}
 
 	public List<Album> getAllAlbumsbyArtistId(int id) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Album> albumList=new ArrayList<Album>();
+		Connection conn= cf.getConnection();
+		String sql= "select * from \"Album\" where \"ArtistId\"= ?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setInt(1, id);
+		ResultSet rs=ps.executeQuery();
+		Album a=null;
+		while(rs.next()) {
+			a= new Album(rs.getInt(1),rs.getString(2),rs.getInt(3));
+			albumList.add(a);
+		}
+		return albumList;
 	}
 
 }
