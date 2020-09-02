@@ -29,7 +29,7 @@ public class atm {
 	
 	//SerializationMethods o = new SerializationMethods();
 	
-	String BAun = "Admin"; //hardcode BankAdmin Username
+	String BAun = "admin"; //hardcode BankAdmin Username
 	String BApw = "adminpass"; //hardcode BankAdmin password
 	
 	String Eu = "Employee"; //hardcode Employee Username
@@ -54,6 +54,8 @@ public class atm {
 		//readJA(); ////used to deserialize joint application data
 		
 		//Our "Seed" that begins our decision tree
+		System.out.println("-------------------------------");
+		System.out.println("Welcome to the Kumar Bank ATM.");
 		System.out.println("-------------------------------");
 		System.out.println("Are you a customer or an administrator?" + "\n" + "a) Customer" + "\n"
 					+ "b) Bank Admin" + "\n" 
@@ -103,7 +105,7 @@ public class atm {
 				//SQL STATEMENT TO CREATE USER IN DB
 				try {
 					udi.makeNewUser(c);
-					System.out.println(udi.getUserList());
+					//System.out.println(udi.getUserList());
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -134,7 +136,7 @@ public class atm {
 								String fullname = custList.get(a).getFN();
 								System.out.println(fullname + "'s Bank Accounts");
 								try {
-									udi.getUserAccounts(fullname);
+									System.out.println(udi.getUserAccounts(fullname));
 								} catch(SQLException e) {
 									e.printStackTrace();
 								}
@@ -151,7 +153,7 @@ public class atm {
 								//SQL STATEMENT TO CREATE USER IN DB
 								try {
 									udi.makeNewUser(newc);
-									System.out.println(udi.getUserList());
+									//System.out.println(udi.getUserList());
 								} catch (SQLException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -159,11 +161,17 @@ public class atm {
 							} else if (c1b.equals("c")) {
 								String fullname = custList.get(a).getFN();
 								System.out.println(fullname + "'s Bank Accounts");
+								try {
+									System.out.println(udi.getUserAccounts(fullname));
+								} catch (SQLException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 								System.out.println("Enter in the username of the account you wish to delete. The account will only be deleted if the account balance is 0.");
 								String deleted = s.nextLine();
 								for(int i=0; i<custList.size(); i++) {
 									if(deleted.equals(custList.get(i).getUN())) {
-										if(custList.get(i).get$() == 0) {
+										if(custList.get(i).get$() == 0 && i!=a) {
 											custList.remove(i);
 											writefile(custList);
 											System.out.println("This account has been deleted.");
@@ -172,10 +180,14 @@ public class atm {
 											} catch(SQLException e){
 												e.printStackTrace();
 											}
-										} else {
-											System.out.println("You have attempted to delete an account with money in it.  As punishment for your crimes, you are now being forced to log back in from the main menu.");
+										} else if (custList.get(i).get$() !=0){
+											System.out.println("You have attempted to delete an account with money in it.");
+										} else if (i == a) {
+											System.out.println("You cannot delete the account you are currently using.");
 										}
-									}
+									} /*else {
+										System.out.println("There is no account with that username. Please log back in to try again.");
+									}*/
 								}
 							} else if (c1b.equals("d")) {
 								boolean transactions = true;
@@ -196,11 +208,16 @@ public class atm {
 											custList.get(a).setFunds(newF);
 											//Show remaining balance
 											System.out.println("New Balance: $"+custList.get(a).get$());
-											//saves new data to customerlist
+											//saves new data to customer list
 											writefile(custList);
+											try {
+												udi.transaction(newF, custList.get(a).getUN());
+											} catch(SQLException e) {
+												e.printStackTrace();
+											}
 										} else {
 											//let them know they can't do overdrafts
-											System.out.println("You can't cheat money!"); 
+											System.out.println("Overdraft alert: cannot withdraw more money than current balance."); 
 											//sys();
 										}
 									} else if (c2b.equals("b")) { 
@@ -212,6 +229,11 @@ public class atm {
 										custList.get(a).setFunds(newF);
 										System.out.println("New Balance: $"+custList.get(a).get$());
 										writefile(custList);
+										try {
+											udi.transaction(newF, custList.get(a).getUN());
+										} catch(SQLException e) {
+											e.printStackTrace();
+										}
 									} else if (c2b.equals("c")) {
 										transactions = false;
 									}
@@ -226,9 +248,8 @@ public class atm {
 						sys();
 					} 
 				}
-				
-				//System.out.println(checkPwd);
-				//iterate over customer arraylist to check if username and password are correct
+				System.out.println("Invalid login credentials. Please try again.");
+				sys();
 		
 			} else {
 				System.out.println("Invalid input, try again.");
@@ -352,175 +373,134 @@ public class atm {
 			String bp = s.nextLine(); 
 			// validates login input, bank admin actions can only be done inside this if block
 			if (bu.equals(BAun) && bp.equals(BApw)) {
-			
-				System.out.println("a) View Accounts" + "\n" + "b) Edits Accounts" + "\n");
+				System.out.println("a) View Users" + "\n" + "b) Create User" + "\n" + "c) Update User" + "\n" + "d) Delete User");
 				String d1 = s.nextLine();
-				if(d1.equals("a")) { //View Accounts branch
-					for (int x=0; x < custList.size(); x++){
-						System.out.println(custList.get(x) + "\n");
-						
+				if(d1.equals("a")) {
+					try {
+						System.out.println(udi.getUserList());
+					} catch (SQLException e) {
+						e.printStackTrace();
 					}
-					/*for(int i=0; i<custList.size(); i++) {
-						System.out.println(i+1 + ": " + custList.get(i));
-					}*/
-					sys();
-				} else if(d1.contentEquals("b")){ // Edit Accounts branch
-					System.out.println("Would you like to:"+ "\n" + "a) Approve/Deny Normal Accounts" + "\n" +
-									"b) Transaction" + "\n" +"c) Delete Accounts" + "\n" + "d) Approve/Deny Joint Accounts" + 
-									"\n" + "e) Create Accounts");
-					String d2 = s.nextLine();
-					if(d2.equals("a")) { //Approve/Deny Normal Accounts branch, same implementation as employee
-						System.out.println("List of Normal Accounts to be Approved:");
-		 				for(int i=0; i<appList.size(); i++) {
-							System.out.println(i+1 + ": " + appList.get(i));
+				} else if(d1.equals("b")){ 
+					System.out.println("What is the user's full name? Be sure to correctly capitalize both names.");
+					String nameinput = s.nextLine();
+					for(int i=0; i<custList.size(); i++) {
+						if(nameinput.equals(custList.get(i).getFN())) {
+							System.out.println("This user already has an account.");
+							System.out.println("For security purposes, please start from the main menu.");
+							sys();
 						}
-						System.out.print('\n');
-						System.out.println("Would you like to:"+ "\n" + "a) Approve Account" + "\n" +
-							"b) Deny Accounts");
-						String d2a = s.nextLine();
-						/*if (d2a.equals("a")) { //approve normal accounts branch
-							System.out.println("Enter the number of the account you want to approve from the list above. Enter 0 if you don't want to approve any accounts.");
-		 					int n = Integer.parseInt(s.nextLine());
-		 					Employee e = new Employee();
-		 					ArrayList<Application> newApproved = new ArrayList<Application>();
-		 					newApproved = e.approveApplication(appList, n);
-		 					writeApps(appList);
-		 					if(!newApproved.isEmpty()) {
-		 						Customer newUser = new Customer(newApproved.get(0).getF1(), newApproved.get(0).getL1(), newApproved.get(0).getU1(), newApproved.get(0).getP1());
-			 					custList.add(newUser);
-			 					writefile(custList);
-		 					}
-						} else if(d2a.equals("b")){ //deny normal accounts branch
-							System.out.println("Enter the number of the account you want to deny from the list above. Enter 0 if you don't want to deny any accounts.");
-		 					int n = Integer.parseInt(s.nextLine());
-		 					Bankadmin ba = new Bankadmin();
-		 					//ArrayList<Application> newDenied = new ArrayList<Application>();
-		 					ba.denyApplication(appList, n);
-		 					writeApps(appList);
-						}*/
-						sys();
-					} else if (d2.equals("b")) { // Transactions branch
-						//prints out all customers
-						for (int x=0; x < custList.size(); x++){
-							System.out.println(custList.get(x) + "\n");
-						} 
-						//bank admin inputs name of account to edit
-						System.out.println("Input Username of account you would like to make a transaction for.");
-						String ua = s.nextLine();
-						for (int n = 0; n < custList.size(); n++) {
-							//ensures username can be found in customer list
-							if (custList.get(n).getUN().equals(ua)) {
-								System.out.println("Would you like to:" + "\n" + "a) Withdraw" + "\n" + "b) Deposit" 
-										+"\n"+ "c) Transfer");
-								String d3a = s.nextLine(); 
-								if(d3a.contentEquals("a")) { //Withdraw branch
-									int $ = custList.get(n).get$(); 
-									System.out.println("How much would you like to withdraw?"); 
-									int less$ = Integer.parseInt(s.nextLine()); 
-									int newF = $ - less$;
-									custList.get(n).setFunds(newF);
-									System.out.println("Remaining Balance: $"+custList.get(n).get$());
-									writefile(custList);
-									sys();
-								} else if (d3a.equals("b")) { //Deposit branch
-									int $ = custList.get(n).get$();
-									System.out.println("How much would you like to Deposit?"); 
-									int plus$ = Integer.parseInt(s.nextLine()); 
-									int newF = $ + plus$;
-									custList.get(n).setFunds(newF);
-									System.out.println("New Balance: $"+custList.get(n).get$());
-									writefile(custList);
-									sys();
-								} else if (d3a.equals("c")){ //Transfer branch
-									System.out.println("Enter Account Username that you will be transferring money to: ");
-									String h = s.nextLine();
-									for (int t = 0; t < custList.size(); t++ ) {
-										if (custList.get(t).getUN().equals(h) && n!= t ) {
-											System.out.println("Transfer has begun\n" + "How much money would you like to Transfer?");
-											int m$ = Integer.parseInt(s.nextLine());
-											int newF = custList.get(n).get$() - m$;
-											custList.get(n).setFunds(newF);
-											int nf = custList.get(t).get$() + m$;
-											custList.get(t).setFunds(nf);
-											System.out.println("New Balance for 1st Account: $"+custList.get(n).get$() + "\n"
-															+	"New Balance for 2nd Account: $"+custList.get(t).get$());
-												
-										}
-									}
-									writefile(custList);
-									sys();
+					}
+					System.out.println("Create New Username:");
+					String unameinput = s.nextLine();
+					for(int i=0; i<custList.size(); i++) {
+						if(unameinput.equals(custList.get(i).getUN())) {
+							System.out.println("This username is already in use. Please try again.");
+							System.out.println("For security purposes, please start from the main menu.");
+							sys();
+						}
+					}
+					System.out.println("Create Password:");
+					String pwinput = s.nextLine();
+					int funds = 0;
+					Customer c = new Customer(nameinput, unameinput, pwinput, funds);
+					custList.add(new Customer(nameinput, unameinput, pwinput, funds));
+					writefile(custList);
+					//System.out.println(custList);
+					System.out.println("New user " + nameinput + " has been registered.");
+					//SQL STATEMENT TO CREATE USER IN DB
+					try {
+						udi.makeNewUser(c);
+						//System.out.println(udi.getUserList());
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else if(d1.equals("c")) {
+					System.out.println("Do you want to update a user or a user account?" + "\n" + "a) User" + "\n" + "b) User Account");
+					String userOrAccount = s.nextLine();
+					if(userOrAccount.equals("a")) {
+						System.out.println("Type in the full name of the user you would like to update.");
+						String originalName = s.nextLine();
+						System.out.println("What would you like to change this user's name to?");
+						String nameChange = s.nextLine();
+						for(int i=0; i<custList.size(); i++) {
+							if(originalName.equals(custList.get(i).getFN())) {
+								Customer cust = new Customer(nameChange, custList.get(i).getUN(), custList.get(i).getPW(), custList.get(i).get$());
+								custList.remove(i);
+								custList.add(cust);
+								writefile(custList);
+								System.out.println("User's name was successfully changed.");
+								try {
+									udi.updateUserFullName(nameChange, originalName);
+								} catch(SQLException e) {
+									e.printStackTrace();
 								}
 							}
 						}
-						
-					} else if(d2.equals("c")) { //Cancel Accounts branch
-						System.out.println("List of Customer Accounts:");
-						//prints out all customer accounts
-						for(int i=0; i<custList.size(); i++) {
-							System.out.println(i+1 + ": " + custList.get(i));
+					} else if(userOrAccount.equals("b")) {
+						System.out.println("Which account would you like to update? Type in the account username.");
+						String user = s.nextLine();
+						System.out.println("Would you like to update this account's username or password?" + "\n" + "a) Username" + "\n" + "b) Password");
+						String userOrPass = s.nextLine();
+						if(userOrPass.equals("a")) {
+							System.out.println("Type in new username:");
+							String newuser = s.nextLine();
+							for(int i=0; i<custList.size(); i++) {
+								if(custList.get(i).getUN().equals(user)) {
+									Customer c = new Customer(custList.get(i).getFN(), newuser, custList.get(i).getPW(), custList.get(i).get$());
+									custList.remove(i);
+									custList.add(c);
+									writefile(custList);
+									System.out.println("Account username was successfully changed.");
+									try {
+										udi.updateAccountUserName(newuser, user);
+									} catch(SQLException e) {
+										e.printStackTrace();
+									}
+								}
+							}
+						} else if (userOrPass.equals("b")) {
+							System.out.println("Type in new password:");
+							String newpass = s.nextLine();
+							for(int i=0; i<custList.size(); i++) {
+								if(custList.get(i).getUN().equals(user)) {
+									String oldpass = custList.get(i).getPW();
+									Customer c = new Customer(custList.get(i).getFN(), custList.get(i).getUN(), newpass, custList.get(i).get$());
+									custList.remove(i);
+									custList.add(c);
+									writefile(custList);
+									System.out.println("password was successfully changed.");
+									try {
+										udi.updateAccountPassWord(newpass, oldpass);
+									} catch(SQLException e) {
+										e.printStackTrace();
+									}
+								}
+							}
 						}
-						System.out.println("Which account would you like to delete?");
-						int n = Integer.parseInt(s.nextLine());
-						//uses bank admin integer input to delete account with index n-1
-	 					Bankadmin ba = new Bankadmin();
-	 					//ArrayList<Customer> newDeleted = new ArrayList<Customer>();
-	 					//account deleted
-	 					ba.cancelAccount(custList, n);
-	 					//rewrite customer list
-	 					writefile(custList);
-					} /*else if(d2.equals("d")) { // Approve/Deny joint accounts branch
-						System.out.println("List of Joint Accounts to be Approved:");
-						for(int i=0; i<JappList.size(); i++) {
-							System.out.println(i+1 + ": " + JappList.get(i));
-						}
-						System.out.print('\n');
-		 				System.out.println("Would you like to:"+ "\n" + "a) Approve Joint Accounts" + "\n" +
-		 						"b) Deny Joint Accounts");
-		 				String d2b = s.nextLine();
-		 				if (d2b.equals("a")) { // approve account branch
-		 					System.out.println("Enter the number of the account you want to approve from the list above. Enter 0 if you don't want to approve any accounts.");
-		 					int n = Integer.parseInt(s.nextLine());
-		 					Bankadmin ba = new Bankadmin();
-		 					ArrayList<JointApp> newApproved = new ArrayList<JointApp>();
-		 					newApproved = ba.approveJointApplication(JappList, n);
-		 					writeJA(JappList);
-		 					Customer newUser = new Customer(newApproved.get(0).getfl1(), newApproved.get(0).getfl2(), newApproved.get(0).getUname(), newApproved.get(0).getPW());
-		 					custList.add(newUser);
-		 					writefile(custList);
-		 					
-		 				} else if(d2b.equals("b")){ //deny account branch
-		 					System.out.println("Enter the number of the account you want to deny from the list above. Enter 0 if you don't want to deny any accounts.");
-		 					int n = Integer.parseInt(s.nextLine());
-		 					Bankadmin ba = new Bankadmin();
-		 					//ArrayList<JointApp> newDenied = new ArrayList<JointApp>();
-		 					ba.denyJointApplication(JappList, n);
-		 					writeJA(JappList);
-		 				} 
-					}*/ else if(d2.equals("e")) {
-						//asks for first name, last name, username, and password info
-						System.out.println("What is the customer's full name?");
+					}
+					
+				} else if(d1.equals("d")) {
+					for(int i=0; i<custList.size(); i++) {
+						System.out.println("Which user would you like to delete? Be sure to type in their full name.");
 						String fullname = s.nextLine();
-						//System.out.println("What is the customer's last name?");
-						//String lname = s.nextLine();
-						System.out.println("Create New Customer Username:");
-						String uname = s.nextLine();
-						System.out.println("Create Customer Password:");
-						//funds is set automatically to $10 because our policy required an amount greater than 0 to open an account
-						int funds = 10;
-						String pw = s.nextLine();
-						//create new application object and then add to apply list
-						custList.add(new Customer (fullname,uname,pw, funds)); 
-						//saves application to appplication.txt file
-						writefile(custList);
-						//Let the user know their application is waiting for approval
-						System.out.println("A new customer has been registered!");
-						sys(); //recall the system
-					} 
-					sys();
-				}	
+						if(custList.get(i).getFN().equals(fullname)) {
+							custList.remove(i);
+							writefile(custList);
+							System.out.println("User has been deleted");
+							try {
+								udi.deleteUser(fullname);
+							} catch(SQLException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
 			} else { //protects bank admin account from users without knowledge of password
 				System.out.println("Invalid Login Information.");
 			}
+			System.out.println("For security purposes, please log in again");
 			sys();
 		}
 		s.close();
@@ -604,12 +584,12 @@ public class atm {
 			fis.close();
     	} 
     	catch (IOException ioe) {
-    		System.out.println("Customer List is empty");
+    		//System.out.println("Customer List is empty");
     		//ioe.printStackTrace();
         	//return;
     	} 
 		catch(ClassNotFoundException c) {
-        	System.out.println("Class not found");
+        	//System.out.println("Class not found");
         	c.printStackTrace();
         	//return;
     	}
@@ -628,12 +608,12 @@ public class atm {
 			fis.close();
     	} 
     	catch (IOException ioe) {
-    		System.out.println("Application List is empty");
+    		//System.out.println("Application List is empty");
     		//ioe.printStackTrace();
         	//return;
     	} 
 		catch(ClassNotFoundException c) {
-        	System.out.println("Class not found");
+        	//System.out.println("Class not found");
         	c.printStackTrace();
         	//return;
     	}
@@ -653,11 +633,11 @@ public class atm {
 	    } 
 	    catch (IOException ioe) {
 	        //ioe.printStackTrace();
-	    	System.out.println("Joint Application List is empty");
+	    	//System.out.println("Joint Application List is empty");
 	    	//return;
 	    } 
 		catch(ClassNotFoundException c) {
-	        	System.out.println("Class not found");
+	        	//System.out.println("Class not found");
 	        	c.printStackTrace();
 	        	//return;
 	    }
