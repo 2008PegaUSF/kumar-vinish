@@ -1,0 +1,10 @@
+[2020-09-02T09:45:38,392 INFO ] bankingApp.atm - Entering customer login
+[2020-09-02T09:45:50,051 INFO ] bankingApp.atm - Entering customer login
+[2020-09-02T09:46:03,679 INFO ] bankingApp.atm - Entering customer login
+[2020-09-02T09:46:14,708 INFO ] bankingApp.atm - Entering customer login
+[2020-09-02T09:46:24,309 INFO ] bankingApp.atm - Entering customer login
+[2020-09-02T09:55:06,451 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T09:55:08,533 INFO ] bankingApp.atm - Entered Customer Branch.
+[2020-09-02T09:55:09,744 INFO ] bankingApp.atm - Entered Customer Registration Branch.
+[2020-09-02T09:55:20,721 INFO ] bankingApp.atm - New customer registered to database.
+[2020-09-02T09:55:20,722 INFO ] bankingApp.atm - Entered Main Menu.

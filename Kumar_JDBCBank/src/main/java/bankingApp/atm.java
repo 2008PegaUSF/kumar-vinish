@@ -10,6 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+
 import beans.User;
 import daoImpl.UserDaoImpl;
 
@@ -17,7 +21,7 @@ public class atm {
 	
 	//scanner class instantiated
 	Scanner s = new Scanner(System.in);
-	
+	static Logger log = LogManager.getLogger(atm.class);
 	//String uname;
 	//String pw;
 	//String U2;
@@ -49,6 +53,7 @@ public class atm {
 	// The heart of our project is built using this if-else if-else branch
 	public void sys() {
 		
+		Configurator.initialize(null, "log4j.xml");
 		readfile(); //used to deserialize customer data
 		//readApps(); //used to deserialize normal application data
 		//readJA(); ////used to deserialize joint application data
@@ -57,6 +62,7 @@ public class atm {
 		System.out.println("-------------------------------");
 		System.out.println("Welcome to the Kumar Bank ATM.");
 		System.out.println("-------------------------------");
+		log.info("Entered Main Menu.");
 		System.out.println("Are you a customer or an administrator?" + "\n" + "a) Customer" + "\n"
 					+ "b) Bank Admin" + "\n" 
 					);
@@ -66,6 +72,7 @@ public class atm {
 		//Branch 1: Customer
 		if (p.equals("a"))  {
 			//Register or login to user account
+			log.info("Entered Customer Branch.");
 			System.out.println("What would you like to do?"+"\n"
 					+"a)Register"+ "\n"
 					+ "b)Login" );
@@ -73,12 +80,14 @@ public class atm {
 			String c1 = s.nextLine();
 			if(c1.equals("a")) {//branch 1a
 				//asks for first name, last name, username, and password info
+				log.info("Entered Customer Registration Branch.");
 				System.out.println("What is your full name? Be sure to correctly capitalize both names.");
 				String nameinput = s.nextLine();
 				for(int i=0; i<custList.size(); i++) {
 					if(nameinput.equals(custList.get(i).getFN())) {
 						System.out.println("You already have an account.");
 						System.out.println("For security purposes, please start from the main menu.");
+						log.info("Attempted to register with existing account holder.");
 						sys();
 					}
 				}
@@ -88,6 +97,7 @@ public class atm {
 					if(unameinput.equals(custList.get(i).getUN())) {
 						System.out.println("This username is already in use. Please try again.");
 						System.out.println("For security purposes, please start from the main menu.");
+						log.info("Attempted to register with existing username.");
 						sys();
 					}
 				}
@@ -106,6 +116,7 @@ public class atm {
 				try {
 					udi.makeNewUser(c);
 					//System.out.println(udi.getUserList());
+					log.info("New customer registered to database.");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -114,6 +125,7 @@ public class atm {
 				sys(); //recall the system
 				
 			} else if(c1.equals("b")) {//branch 1b
+				log.info("Entered Customer Login Branch.");
 				System.out.println("Input Username: ");
 				//stores username to string variable
 				String checkUname = s.nextLine();
@@ -126,6 +138,7 @@ public class atm {
 					if(pwCheck.equals(checkPwd) && userCheck.equals(checkUname)) {
 						boolean loggedin = true;
 						while(loggedin) {
+							log.info("Logged in successfully.");
 							//System.out.println("User Information");
 							//System.out.println(custList.get(a));
 							System.out.println("What would you like to do?" + "\n" + "a) View Account(s)" + 
@@ -133,14 +146,17 @@ public class atm {
 												"\n" + "d) Make a Transaction" + "\n" + "e) Log Out");
 							String c1b = s.nextLine();
 							if(c1b.equals("a")) {
+								log.info("Entered View Accounts Branch for Customer.");
 								String fullname = custList.get(a).getFN();
 								System.out.println(fullname + "'s Bank Accounts");
 								try {
 									System.out.println(udi.getUserAccounts(fullname));
+									log.info("Customer accounts viewed.");
 								} catch(SQLException e) {
 									e.printStackTrace();
 								}
 							} else if (c1b.equals("b")) {
+								log.info("Entered Customer Create Account Branch.");
 								System.out.println("Create username for new account:");
 								String newuser = s.nextLine();
 								System.out.println("Create password for new account:");
@@ -153,12 +169,14 @@ public class atm {
 								//SQL STATEMENT TO CREATE USER IN DB
 								try {
 									udi.makeNewUser(newc);
+									log.info("New customer account created.");
 									//System.out.println(udi.getUserList());
 								} catch (SQLException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 							} else if (c1b.equals("c")) {
+								log.info("Entered Customer Delete Accounts Branch.");
 								String fullname = custList.get(a).getFN();
 								System.out.println(fullname + "'s Bank Accounts");
 								try {
@@ -177,19 +195,23 @@ public class atm {
 											System.out.println("This account has been deleted.");
 											try {
 												udi.deleteUserAccount(deleted);
+												log.info("Customer account deleted successfully.");
 											} catch(SQLException e){
 												e.printStackTrace();
 											}
 										} else if (custList.get(i).get$() !=0){
 											System.out.println("You have attempted to delete an account with money in it.");
+											log.info("Attempted to delete account that was not empty.");
 										} else if (i == a) {
 											System.out.println("You cannot delete the account you are currently using.");
+											log.info("Attempted to delete account currently in use.");
 										}
 									} /*else {
 										System.out.println("There is no account with that username. Please log back in to try again.");
 									}*/
 								}
 							} else if (c1b.equals("d")) {
+								log.info("Entered Customer Transactions Branch.");
 								boolean transactions = true;
 								while(transactions) {
 									//decide transaction type
@@ -197,6 +219,7 @@ public class atm {
 														+ "\n" + "c) Finish Making Transactions");
 									String c2b = s.nextLine(); 
 									if (c2b.contentEquals("a")) { 
+										log.info("Entered Customer Withdrawals Branch.");
 										//Withdrawal branch
 										int $ = custList.get(a).get$(); 
 										System.out.println("How much would you like to withdraw?"); 
@@ -212,16 +235,19 @@ public class atm {
 											writefile(custList);
 											try {
 												udi.transaction(newF, custList.get(a).getUN());
+												log.info("Successful withdrawal.");
 											} catch(SQLException e) {
 												e.printStackTrace();
 											}
 										} else {
 											//let them know they can't do overdrafts
 											System.out.println("Overdraft alert: cannot withdraw more money than current balance."); 
+											log.info("Attempted to withdraw more money than was available.");
 											//sys();
 										}
 									} else if (c2b.equals("b")) { 
 										//Deposit branch
+										log.info("Entered Deposits Branch.");
 										int $ = custList.get(a).get$(); //change funds to double
 										System.out.println("How much would you like to Deposit?"); 
 										int plus$ = Integer.parseInt(s.nextLine()); 
@@ -231,6 +257,7 @@ public class atm {
 										writefile(custList);
 										try {
 											udi.transaction(newF, custList.get(a).getUN());
+											log.info("Successful deposit.");
 										} catch(SQLException e) {
 											e.printStackTrace();
 										}
@@ -240,19 +267,23 @@ public class atm {
 								}
 							} else if (c1b.equals("e")) {
 								System.out.println("Thank you for choosing Kumar Bank. We hope to see you again soon!");
+								log.info("Customer logged out.");
 								loggedin = false;
 							} else {
 								System.out.println("Invalid Input. Please try again.");
+								log.info("Invalid input.");
 							}	
 						} 
 						sys();
 					} 
 				}
 				System.out.println("Invalid login credentials. Please try again.");
+				log.info("Invalid log in credentials.");
 				sys();
 		
 			} else {
 				System.out.println("Invalid input, try again.");
+				log.info("Invalid input.");
 				sys();
 			}
 		}
@@ -366,6 +397,7 @@ public class atm {
  // Bank Admin branch 3	
 		
 		else if(p.equals("b")) {
+			log.info("Entered Admin Branch.");
 			//login info for Bank Admin
 			System.out.println("Login in to account" + "\n" + "What is your Username?");
 			String bu = s.nextLine();
@@ -373,11 +405,13 @@ public class atm {
 			String bp = s.nextLine(); 
 			// validates login input, bank admin actions can only be done inside this if block
 			if (bu.equals(BAun) && bp.equals(BApw)) {
+				log.info("Successful admin log in.");
 				System.out.println("a) View Users" + "\n" + "b) Create User" + "\n" + "c) Update User" + "\n" + "d) Delete User");
 				String d1 = s.nextLine();
 				if(d1.equals("a")) {
 					try {
 						System.out.println(udi.getUserList());
+						log.info("Successfully viewed all users.");
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -411,12 +445,14 @@ public class atm {
 					//SQL STATEMENT TO CREATE USER IN DB
 					try {
 						udi.makeNewUser(c);
+						log.info("Successfully made new user.");
 						//System.out.println(udi.getUserList());
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else if(d1.equals("c")) {
+					log.info("Entered update user branch.");
 					System.out.println("Do you want to update a user or a user account?" + "\n" + "a) User" + "\n" + "b) User Account");
 					String userOrAccount = s.nextLine();
 					if(userOrAccount.equals("a")) {
@@ -433,6 +469,7 @@ public class atm {
 								System.out.println("User's name was successfully changed.");
 								try {
 									udi.updateUserFullName(nameChange, originalName);
+									log.info("Successfully updated user.");
 								} catch(SQLException e) {
 									e.printStackTrace();
 								}
@@ -455,6 +492,7 @@ public class atm {
 									System.out.println("Account username was successfully changed.");
 									try {
 										udi.updateAccountUserName(newuser, user);
+										log.info("Successfully updated account username.");
 									} catch(SQLException e) {
 										e.printStackTrace();
 									}
@@ -473,6 +511,7 @@ public class atm {
 									System.out.println("password was successfully changed.");
 									try {
 										udi.updateAccountPassWord(newpass, oldpass);
+										log.info("Successfully updated account password.");
 									} catch(SQLException e) {
 										e.printStackTrace();
 									}
@@ -482,6 +521,7 @@ public class atm {
 					}
 					
 				} else if(d1.equals("d")) {
+					log.info("Entered Delete Users branch.");
 					for(int i=0; i<custList.size(); i++) {
 						System.out.println("Which user would you like to delete? Be sure to type in their full name.");
 						String fullname = s.nextLine();
@@ -491,6 +531,7 @@ public class atm {
 							System.out.println("User has been deleted");
 							try {
 								udi.deleteUser(fullname);
+								log.info("User successfully deleted.");
 							} catch(SQLException e) {
 								e.printStackTrace();
 							}
