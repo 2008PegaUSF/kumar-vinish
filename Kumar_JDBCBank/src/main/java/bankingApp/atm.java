@@ -10,10 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import daoImpl.*;
-import beans.*;
-import dao.*;
-import util.*;
+import beans.User;
+import daoImpl.UserDaoImpl;
 
 public class atm {
 	
@@ -73,26 +71,44 @@ public class atm {
 			String c1 = s.nextLine();
 			if(c1.equals("a")) {//branch 1a
 				//asks for first name, last name, username, and password info
+				System.out.println("What is your full name? Be sure to correctly capitalize both names.");
+				String nameinput = s.nextLine();
+				for(int i=0; i<custList.size(); i++) {
+					if(nameinput.equals(custList.get(i).getFN())) {
+						System.out.println("You already have an account.");
+						System.out.println("For security purposes, please start from the main menu.");
+						sys();
+					}
+				}
 				System.out.println("Create New Username:");
 				String unameinput = s.nextLine();
 				for(int i=0; i<custList.size(); i++) {
 					if(unameinput.equals(custList.get(i).getUN())) {
-						System.out.println("Username is taken.");
+						System.out.println("This username is already in use. Please try again.");
 						System.out.println("For security purposes, please start from the main menu.");
 						sys();
 					}
 				}
 				System.out.println("Create Password:");
 				String pwinput = s.nextLine();
-				System.out.println("What is your first name?");
-				String fnameinput = s.nextLine();
-				System.out.println("What is your last name?");
-				String lnameinput = s.nextLine();
-				//int funds = 0;
-				custList.add(new Customer(fnameinput, lnameinput, unameinput, pwinput));
+				
+				//System.out.println("What is your last name?");
+				//String lnameinput = s.nextLine();
+				int funds = 0;
+				Customer c = new Customer(nameinput, unameinput, pwinput, funds);
+				custList.add(new Customer(nameinput, unameinput, pwinput, funds));
 				writefile(custList);
-				System.out.println("New user " + fnameinput + " " + lnameinput + " has been registered.");
-//SQL STATEMENT TO CREATE USER IN DB				
+				//System.out.println(custList);
+				System.out.println("New user " + nameinput + " has been registered.");
+				//SQL STATEMENT TO CREATE USER IN DB
+				try {
+					udi.makeNewUser(c);
+					System.out.println(udi.getUserList());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				sys(); //recall the system
 				
 			} else if(c1.equals("b")) {//branch 1b
@@ -108,31 +124,78 @@ public class atm {
 					if(pwCheck.equals(checkPwd) && userCheck.equals(checkUname)) {
 						boolean loggedin = true;
 						while(loggedin) {
-							System.out.println("User Information");
-							System.out.println(custList.get(a));
-							System.out.println("What would you like to do?");
-							System.out.println("a) ");
-							for (int i = 0 ; i < custList.size(); i++) {
-								//if true, then transactions branch is open
-								//if (custList.get(i).getUN().equals(checkUname) && custList.get(i).getPW().equals(checkPwd)) {
-								//System.out.println(custList.get(i).getPW());
-								if(findCusty(checkPwd).equals(custList.get(i).getPW())) {
+							//System.out.println("User Information");
+							//System.out.println(custList.get(a));
+							System.out.println("What would you like to do?" + "\n" + "a) View Account(s)" + 
+												"\n" + "b) Create Another Account" + "\n" + "c) Delete Empty Account(s)" + 
+												"\n" + "d) Make a Transaction" + "\n" + "e) Log Out");
+							String c1b = s.nextLine();
+							if(c1b.equals("a")) {
+								String fullname = custList.get(a).getFN();
+								System.out.println(fullname + "'s Bank Accounts");
+								try {
+									udi.getUserAccounts(fullname);
+								} catch(SQLException e) {
+									e.printStackTrace();
+								}
+							} else if (c1b.equals("b")) {
+								System.out.println("Create username for new account:");
+								String newuser = s.nextLine();
+								System.out.println("Create password for new account:");
+								String newpass = s.nextLine();
+								int newfunds = 0;
+								Customer newc = new Customer(custList.get(a).getFN(), newuser, newpass, newfunds);
+								custList.add(newc);
+								writefile(custList);
+								System.out.println("New account with username " + newuser + " has been registered.");
+								//SQL STATEMENT TO CREATE USER IN DB
+								try {
+									udi.makeNewUser(newc);
+									System.out.println(udi.getUserList());
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							} else if (c1b.equals("c")) {
+								String fullname = custList.get(a).getFN();
+								System.out.println(fullname + "'s Bank Accounts");
+								System.out.println("Enter in the username of the account you wish to delete. The account will only be deleted if the account balance is 0.");
+								String deleted = s.nextLine();
+								for(int i=0; i<custList.size(); i++) {
+									if(deleted.equals(custList.get(i).getUN())) {
+										if(custList.get(i).get$() == 0) {
+											custList.remove(i);
+											writefile(custList);
+											System.out.println("This account has been deleted.");
+											try {
+												udi.deleteUserAccount(deleted);
+											} catch(SQLException e){
+												e.printStackTrace();
+											}
+										} else {
+											System.out.println("You have attempted to delete an account with money in it.  As punishment for your crimes, you are now being forced to log back in from the main menu.");
+										}
+									}
+								}
+							} else if (c1b.equals("d")) {
+								boolean transactions = true;
+								while(transactions) {
 									//decide transaction type
 									System.out.println("Would you like to:" + "\n" + "a) Withdraw" + "\n" + "b) Deposit" 
-														+"\n"+ "c) Transfer" + "\n" + "d) Log Out");
+														+ "\n" + "c) Finish Making Transactions");
 									String c2b = s.nextLine(); 
 									if (c2b.contentEquals("a")) { 
 										//Withdrawal branch
-										int $ = custList.get(i).get$(); 
+										int $ = custList.get(a).get$(); 
 										System.out.println("How much would you like to withdraw?"); 
 										int less$ = Integer.parseInt(s.nextLine()); 
 										//overdraft validation
 										if(less$ <= $) {
 											int newF = $ - less$;
 											//replaces old funds with new funds
-											custList.get(i).setFunds(newF);
+											custList.get(a).setFunds(newF);
 											//Show remaining balance
-											System.out.println("New Balance: $"+custList.get(i).get$());
+											System.out.println("New Balance: $"+custList.get(a).get$());
 											//saves new data to customerlist
 											writefile(custList);
 										} else {
@@ -142,45 +205,26 @@ public class atm {
 										}
 									} else if (c2b.equals("b")) { 
 										//Deposit branch
-										int $ = custList.get(i).get$(); //change funds to double
+										int $ = custList.get(a).get$(); //change funds to double
 										System.out.println("How much would you like to Deposit?"); 
 										int plus$ = Integer.parseInt(s.nextLine()); 
 										int newF = $ + plus$;
-										custList.get(i).setFunds(newF);
-										System.out.println("New Balance: $"+custList.get(i).get$());
+										custList.get(a).setFunds(newF);
+										System.out.println("New Balance: $"+custList.get(a).get$());
 										writefile(custList);
-									} else if (c2b.equals("c")){
-										//Transfers branch
-										System.out.println("Enter Account Username that you will be transferring money to: ");
-										String h = s.nextLine();
-										System.out.println("Enter Account Password that you will be transferring money to: ");
-										String h1 = s.nextLine();
-										for (int t = 0; t < custList.size(); t++ ) {
-											if ((custList.get(t).getUN().equals(h) && custList.get(t).getPW().equals(h1)) && t!=i) {
-												System.out.println("Transfer has begun\n" + "How much money would you like to Transfer?");
-												int m$ = Integer.parseInt(s.nextLine());
-												if(m$ <= custList.get(i).get$()) {
-													int newF = custList.get(i).get$() - m$;
-													custList.get(i).setFunds(newF);
-													int nf = custList.get(t).get$() + m$;
-													custList.get(t).setFunds(nf);
-													System.out.println("New Balance for 1st Account: $"+custList.get(i).get$() + "\n"
-																	+	"New Balance for 2nd Account: $"+custList.get(t).get$());
-												} else {
-													System.out.println("You're not slick!!!"); //Let them know they can't mess around
-													sys();
-												}
-											}
-										}
-										writefile(custList);
-									} else if (c2b.equals("d")) {
-										loggedin = false;
+									} else if (c2b.equals("c")) {
+										transactions = false;
 									}
-									//sys();
-								} //sys();
-							}
-						} sys();
-					}
+								}
+							} else if (c1b.equals("e")) {
+								System.out.println("Thank you for choosing Kumar Bank. We hope to see you again soon!");
+								loggedin = false;
+							} else {
+								System.out.println("Invalid Input. Please try again.");
+							}	
+						} 
+						sys();
+					} 
 				}
 				
 				//System.out.println(checkPwd);
@@ -334,7 +378,7 @@ public class atm {
 						System.out.println("Would you like to:"+ "\n" + "a) Approve Account" + "\n" +
 							"b) Deny Accounts");
 						String d2a = s.nextLine();
-						if (d2a.equals("a")) { //approve normal accounts branch
+						/*if (d2a.equals("a")) { //approve normal accounts branch
 							System.out.println("Enter the number of the account you want to approve from the list above. Enter 0 if you don't want to approve any accounts.");
 		 					int n = Integer.parseInt(s.nextLine());
 		 					Employee e = new Employee();
@@ -353,7 +397,7 @@ public class atm {
 		 					//ArrayList<Application> newDenied = new ArrayList<Application>();
 		 					ba.denyApplication(appList, n);
 		 					writeApps(appList);
-						}
+						}*/
 						sys();
 					} else if (d2.equals("b")) { // Transactions branch
 						//prints out all customers
@@ -424,7 +468,7 @@ public class atm {
 	 					ba.cancelAccount(custList, n);
 	 					//rewrite customer list
 	 					writefile(custList);
-					} else if(d2.equals("d")) { // Approve/Deny joint accounts branch
+					} /*else if(d2.equals("d")) { // Approve/Deny joint accounts branch
 						System.out.println("List of Joint Accounts to be Approved:");
 						for(int i=0; i<JappList.size(); i++) {
 							System.out.println(i+1 + ": " + JappList.get(i));
@@ -452,12 +496,12 @@ public class atm {
 		 					ba.denyJointApplication(JappList, n);
 		 					writeJA(JappList);
 		 				} 
-					} else if(d2.equals("e")) {
+					}*/ else if(d2.equals("e")) {
 						//asks for first name, last name, username, and password info
-						System.out.println("What is the customer's first name?");
-						String fname = s.nextLine();
-						System.out.println("What is the customer's last name?");
-						String lname = s.nextLine();
+						System.out.println("What is the customer's full name?");
+						String fullname = s.nextLine();
+						//System.out.println("What is the customer's last name?");
+						//String lname = s.nextLine();
 						System.out.println("Create New Customer Username:");
 						String uname = s.nextLine();
 						System.out.println("Create Customer Password:");
@@ -465,7 +509,7 @@ public class atm {
 						int funds = 10;
 						String pw = s.nextLine();
 						//create new application object and then add to apply list
-						custList.add(new Customer (fname,lname,uname,pw)); 
+						custList.add(new Customer (fullname,uname,pw, funds)); 
 						//saves application to appplication.txt file
 						writefile(custList);
 						//Let the user know their application is waiting for approval

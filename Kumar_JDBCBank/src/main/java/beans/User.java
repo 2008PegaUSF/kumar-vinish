@@ -7,24 +7,26 @@ public class User {
 	private String userLName;
 	private String userUName;
 	private String userPass;
+	private int funds;
 	
 	public User() {
 		super();
 	}
 
-	public User(int userId, String userFName, String userLName, String userUName, String userPass) {
+	public User(int userId, String userFName, String userUName, String userPass, int funds) {
 		super();
 		this.userId = userId;
 		this.userFName = userFName;
-		this.userLName = userLName;
+		//this.userLName = userLName;
 		this.userUName = userUName;
 		this.userPass = userPass;
+		this.funds = funds;
 	}
 	
 	@Override
 	public String toString() {
-		return "User " + userId + ": Name = " + userFName + " " + userLName + ", Username = "
-				+ userUName + ", Password = " + userPass;
+		return "User " + userId + ": Name = " + userFName + ", Username = "
+				+ userUName + ", Password = " + userPass + ", Funds = " + funds;
 	}
 
 	public int getUserId() {
@@ -67,5 +69,12 @@ public class User {
 		this.userPass = userPass;
 	}
 	
+	public int getFunds() {
+		return funds;
+	}
+	
+	public void setFunds(int funds) {
+		this.funds = funds;
+	}
 	
 }

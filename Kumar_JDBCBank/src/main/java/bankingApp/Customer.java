@@ -13,17 +13,17 @@ public class Customer implements Serializable {
 	String uname;
 	String pw;
 	int funds;
-	String fname;
-	String lname;
+	String fullname;
+	//String lname;
 	
-	public Customer(String fname, String lname, String uname, 
-						String pw) {
+	public Customer(String fullname, String uname, 
+						String pw, int funds) {
 		//super();
 		this.uname = uname;
 		this.pw = pw;
-		this.fname = fname;
-		this.lname= lname;
-		//this.funds = funds;
+		this.fullname = fullname;
+		//this.lname= lname;
+		this.funds = funds;
 		
 	}
 	
@@ -32,9 +32,8 @@ public class Customer implements Serializable {
 	}
 	
 	public String toString() {
-		return "[USERNAME: " + uname +","+ " PASSWORD: " + pw  +","+ " FIRST NAME: " + 
-    			fname +"," + " LAST NAME: " + lname +","+ " ACCOUNT BALANCES: " +"$"+ funds 
-    			+ "]";
+		return "[USERNAME: " + uname +","+ " PASSWORD: " + pw  +","+ " FULL NAME: " + 
+    			fullname +"," + " ACCOUNT BALANCES: " +"$"+ funds + "]";
 	}
 	
 	public String getUN() {
@@ -46,12 +45,12 @@ public class Customer implements Serializable {
 	}
 	
 	public String getFN() {
-		return fname;
+		return fullname;
 	}
 	
-	public String getLN() {
+	/*public String getLN() {
 		return lname;
-	}
+	}*/
 	
 	public int get$() {
 		return funds;
