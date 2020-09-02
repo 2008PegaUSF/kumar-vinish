@@ -522,9 +522,11 @@ public class atm {
 					
 				} else if(d1.equals("d")) {
 					log.info("Entered Delete Users branch.");
+					System.out.println("Which user would you like to delete? Be sure to type in their full name.");
+					String fullname = s.nextLine();
 					for(int i=0; i<custList.size(); i++) {
-						System.out.println("Which user would you like to delete? Be sure to type in their full name.");
-						String fullname = s.nextLine();
+						
+						
 						if(custList.get(i).getFN().equals(fullname)) {
 							custList.remove(i);
 							writefile(custList);

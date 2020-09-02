@@ -8,3 +8,56 @@
 [2020-09-02T09:55:09,744 INFO ] bankingApp.atm - Entered Customer Registration Branch.
 [2020-09-02T09:55:20,721 INFO ] bankingApp.atm - New customer registered to database.
 [2020-09-02T09:55:20,722 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:05:03,142 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:05:07,391 INFO ] bankingApp.atm - Entered Customer Branch.
+[2020-09-02T10:05:08,811 INFO ] bankingApp.atm - Entered Customer Registration Branch.
+[2020-09-02T10:05:22,047 INFO ] bankingApp.atm - New customer registered to database.
+[2020-09-02T10:05:22,052 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:05:25,139 INFO ] bankingApp.atm - Entered Customer Branch.
+[2020-09-02T10:05:26,516 INFO ] bankingApp.atm - Entered Customer Login Branch.
+[2020-09-02T10:05:29,569 INFO ] bankingApp.atm - Logged in successfully.
+[2020-09-02T10:05:31,807 INFO ] bankingApp.atm - Entered View Accounts Branch for Customer.
+[2020-09-02T10:05:32,001 INFO ] bankingApp.atm - Customer accounts viewed.
+[2020-09-02T10:05:32,001 INFO ] bankingApp.atm - Logged in successfully.
+[2020-09-02T10:05:39,747 INFO ] bankingApp.atm - Entered Customer Transactions Branch.
+[2020-09-02T10:05:41,708 INFO ] bankingApp.atm - Entered Deposits Branch.
+[2020-09-02T10:05:43,930 INFO ] bankingApp.atm - Successful deposit.
+[2020-09-02T10:05:46,462 INFO ] bankingApp.atm - Entered Customer Withdrawals Branch.
+[2020-09-02T10:05:48,293 INFO ] bankingApp.atm - Successful withdrawal.
+[2020-09-02T10:07:53,320 INFO ] bankingApp.atm - Entered Deposits Branch.
+[2020-09-02T10:07:55,089 INFO ] bankingApp.atm - Successful deposit.
+[2020-09-02T10:07:57,333 INFO ] bankingApp.atm - Entered Customer Withdrawals Branch.
+[2020-09-02T10:07:59,090 INFO ] bankingApp.atm - Successful withdrawal.
+[2020-09-02T10:08:12,649 INFO ] bankingApp.atm - Logged in successfully.
+[2020-09-02T10:10:03,065 INFO ] bankingApp.atm - Customer logged out.
+[2020-09-02T10:10:03,067 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:12:20,142 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:12:22,249 INFO ] bankingApp.atm - Entered Customer Branch.
+[2020-09-02T10:12:28,026 INFO ] bankingApp.atm - Entered Customer Registration Branch.
+[2020-09-02T10:13:09,316 INFO ] bankingApp.atm - New customer registered to database.
+[2020-09-02T10:13:09,322 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:13:23,942 INFO ] bankingApp.atm - Entered Admin Branch.
+[2020-09-02T10:13:29,701 INFO ] bankingApp.atm - Successful admin log in.
+[2020-09-02T10:13:31,407 INFO ] bankingApp.atm - Successfully viewed all users.
+[2020-09-02T10:13:31,409 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:13:35,621 INFO ] bankingApp.atm - Entered Admin Branch.
+[2020-09-02T10:13:41,115 INFO ] bankingApp.atm - Successful admin log in.
+[2020-09-02T10:13:52,695 INFO ] bankingApp.atm - Successfully made new user.
+[2020-09-02T10:13:52,697 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:13:55,880 INFO ] bankingApp.atm - Entered Admin Branch.
+[2020-09-02T10:14:06,726 INFO ] bankingApp.atm - Successful admin log in.
+[2020-09-02T10:14:08,567 INFO ] bankingApp.atm - Successfully viewed all users.
+[2020-09-02T10:14:08,568 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:14:18,509 INFO ] bankingApp.atm - Entered Admin Branch.
+[2020-09-02T10:14:37,442 INFO ] bankingApp.atm - Successful admin log in.
+[2020-09-02T10:14:40,928 INFO ] bankingApp.atm - Entered Delete Users branch.
+[2020-09-02T10:14:48,798 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:15:03,059 INFO ] bankingApp.atm - Entered Admin Branch.
+[2020-09-02T10:15:14,578 INFO ] bankingApp.atm - Successful admin log in.
+[2020-09-02T10:15:15,910 INFO ] bankingApp.atm - Successfully viewed all users.
+[2020-09-02T10:15:15,911 INFO ] bankingApp.atm - Entered Main Menu.
+[2020-09-02T10:15:42,800 INFO ] bankingApp.atm - Entered Admin Branch.
+[2020-09-02T10:15:47,484 INFO ] bankingApp.atm - Successful admin log in.
+[2020-09-02T10:15:49,120 INFO ] bankingApp.atm - Entered Delete Users branch.
+[2020-09-02T10:15:55,624 INFO ] bankingApp.atm - User successfully deleted.
+[2020-09-02T10:15:55,626 INFO ] bankingApp.atm - Entered Main Menu.
