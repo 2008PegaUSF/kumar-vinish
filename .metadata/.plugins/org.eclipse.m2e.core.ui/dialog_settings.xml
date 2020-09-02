@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectWizardLocationPage">
 		<list key="location">
+			<item value="C:\Users\vinish\Documents\workspace-spring-tool-suite-4-4.7.1.RELEASE\bankingApp\Joint.txt"/>
 			<item value="C:\Users\vinish\Documents\workspace-spring-tool-suite-4-4.7.1.RELEASE\CoreJavaAssignment"/>
 		</list>
 		<list key="projectNameTemplate">
@@ -45,12 +46,16 @@
 	</section>
 	<section name="MavenProjectWizardArtifactPage">
 		<list key="groupId">
-			<item value="com.revature.util"/>
 			<item value="com.revature.vinish"/>
+			<item value="com.revature.ricardoandvinish"/>
+			<item value="com.revature.util"/>
 		</list>
 		<list key="name">
 		</list>
 		<list key="artifactId">
+			<item value="Kumar_JDBCBank"/>
+			<item value="BankingApplication"/>
+			<item value="BankingApp"/>
 			<item value="JDBC"/>
 			<item value="CoreJava"/>
 			<item value="MyMavenProject"/>

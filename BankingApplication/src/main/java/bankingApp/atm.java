@@ -16,9 +16,9 @@ public class atm {
 	Scanner s = new Scanner(System.in);
 	
 	//ArrayLists used for object
-	ArrayList<Customer> custys = new ArrayList<Customer>();
-	ArrayList<Application> apply = new ArrayList<Application>();
-	ArrayList<JointApp> Japps = new ArrayList<JointApp>();
+	//ArrayList<Customer> custys = new ArrayList<Customer>();
+	//ArrayList<Application> apply = new ArrayList<Application>();
+	//ArrayList<JointApp> Japps = new ArrayList<JointApp>();
 	String uname;
 	String pw;
 	String U2;
@@ -104,86 +104,100 @@ public class atm {
 					int funds = 10;
 					String pw1 = s.nextLine();
 					//instantiates new JointApp Object and adds to Japps
-					Japps.add(new JointApp (fl1, fl2, uname1, pw1, funds)); 
-					writeJA(Japps);
+					JappList.add(new JointApp (fl1, fl2, uname1, pw1, funds)); 
+					writeJA(JappList);
 					System.out.println("Your Joint Account Application has been submitted!");
 					sys();
 				}
 			} else if(c1.equals("b")) {//branch 1b
 				System.out.println("Input Username: ");
 				//stores username to string variable
-				//String checkUname = s.nextLine();
+				String checkUname = s.nextLine();
 				System.out.println("Input Password: ");
 				//stores password to string variable
 				String checkPwd = s.nextLine();
-				System.out.println(custList.get(3).getPW());
-				System.out.println(checkPwd);
-				//iterate over customer arraylist to check if username and password are correct
-				for (int i = 0 ; i < custList.size(); i++) {
-					//if true, then transactions branch is open
-					//if (custList.get(i).getUN().equals(checkUname) && custList.get(i).getPW().equals(checkPwd)) {
-					System.out.println(custList.get(i).getPW());
-					if(findCusty(checkPwd).equals(custList.get(i).getPW())) {
-						//decide transaction type
-						System.out.println("Would you like to:" + "\n" + "a) Withdraw" + "\n" + "b) Deposit" 
-											+"\n"+ "c) Transfer");
-						String c2b = s.nextLine(); 
-						if (c2b.contentEquals("a")) { 
-							//Withdrawal branch
-							int $ = custList.get(i).get$(); 
-							System.out.println("How much would you like to withdraw?"); 
-							int less$ = Integer.parseInt(s.nextLine()); 
-							//overdraft validation
-							if(less$ <= $) {
-								int newF = $ - less$;
-								//replaces old funds with new funds
-								custList.get(i).setFunds(newF);
-								//Show remaining balance
-								System.out.println("New Balance: $"+custList.get(i).get$());
-								//saves new data to customerlist
-								writefile(custList);
-							} else {
-								//let them know they can't do overdrafts
-								System.out.println("You can't cheat money!"); 
-								sys();
-							}
-						} else if (c2b.equals("b")) { 
-							//Deposit branch
-							int $ = custList.get(i).get$(); //change funds to double
-							System.out.println("How much would you like to Deposit?"); 
-							int plus$ = Integer.parseInt(s.nextLine()); 
-							int newF = $ + plus$;
-							custList.get(i).setFunds(newF);
-							System.out.println("New Balance: $"+custList.get(i).get$());
-							writefile(custList);
-						} else if (c2b.equals("c")){
-							//Transfers branch
-							System.out.println("Enter Account Username that you will be transferring money to: ");
-							String h = s.nextLine();
-							System.out.println("Enter Account Password that you will be transferring money to: ");
-							String h1 = s.nextLine();
-							for (int t = 0; t < custList.size(); t++ ) {
-								if ((custList.get(t).getUN().equals(h) && custList.get(t).getPW().equals(h1)) && t!=i) {
-									System.out.println("Transfer has begun\n" + "How much money would you like to Transfer?");
-									int m$ = Integer.parseInt(s.nextLine());
-									if(m$ <= custList.get(t).get$()) {
-										int newF = custList.get(i).get$() - m$;
+				for(int a=0; a<custList.size(); a++) {
+					String pwCheck = custList.get(a).getPW();
+					String userCheck = custList.get(a).getUN();
+					if(pwCheck.equals(checkPwd) && userCheck.equals(checkUname)) {
+						boolean loggedin = true;
+						while(loggedin) {
+							System.out.println("Your Account Information");
+							System.out.println(custList.get(a));
+							for (int i = 0 ; i < custList.size(); i++) {
+								//if true, then transactions branch is open
+								//if (custList.get(i).getUN().equals(checkUname) && custList.get(i).getPW().equals(checkPwd)) {
+								//System.out.println(custList.get(i).getPW());
+								if(findCusty(checkPwd).equals(custList.get(i).getPW())) {
+									//decide transaction type
+									System.out.println("Would you like to:" + "\n" + "a) Withdraw" + "\n" + "b) Deposit" 
+														+"\n"+ "c) Transfer" + "\n" + "d) Log Out");
+									String c2b = s.nextLine(); 
+									if (c2b.contentEquals("a")) { 
+										//Withdrawal branch
+										int $ = custList.get(i).get$(); 
+										System.out.println("How much would you like to withdraw?"); 
+										int less$ = Integer.parseInt(s.nextLine()); 
+										//overdraft validation
+										if(less$ <= $) {
+											int newF = $ - less$;
+											//replaces old funds with new funds
+											custList.get(i).setFunds(newF);
+											//Show remaining balance
+											System.out.println("New Balance: $"+custList.get(i).get$());
+											//saves new data to customerlist
+											writefile(custList);
+										} else {
+											//let them know they can't do overdrafts
+											System.out.println("You can't cheat money!"); 
+											//sys();
+										}
+									} else if (c2b.equals("b")) { 
+										//Deposit branch
+										int $ = custList.get(i).get$(); //change funds to double
+										System.out.println("How much would you like to Deposit?"); 
+										int plus$ = Integer.parseInt(s.nextLine()); 
+										int newF = $ + plus$;
 										custList.get(i).setFunds(newF);
-										int nf = custList.get(t).get$() + m$;
-										custList.get(t).setFunds(nf);
-										System.out.println("New Balance for 1st Account: $"+custList.get(i).get$() + "\n"
-														+	"New Balance for 2nd Account: $"+custList.get(t).get$());
-									} else {
-										System.out.println("You're not slick!!!"); //Let them know they can't mess around
-										sys();
+										System.out.println("New Balance: $"+custList.get(i).get$());
+										writefile(custList);
+									} else if (c2b.equals("c")){
+										//Transfers branch
+										System.out.println("Enter Account Username that you will be transferring money to: ");
+										String h = s.nextLine();
+										System.out.println("Enter Account Password that you will be transferring money to: ");
+										String h1 = s.nextLine();
+										for (int t = 0; t < custList.size(); t++ ) {
+											if ((custList.get(t).getUN().equals(h) && custList.get(t).getPW().equals(h1)) && t!=i) {
+												System.out.println("Transfer has begun\n" + "How much money would you like to Transfer?");
+												int m$ = Integer.parseInt(s.nextLine());
+												if(m$ <= custList.get(i).get$()) {
+													int newF = custList.get(i).get$() - m$;
+													custList.get(i).setFunds(newF);
+													int nf = custList.get(t).get$() + m$;
+													custList.get(t).setFunds(nf);
+													System.out.println("New Balance for 1st Account: $"+custList.get(i).get$() + "\n"
+																	+	"New Balance for 2nd Account: $"+custList.get(t).get$());
+												} else {
+													System.out.println("You're not slick!!!"); //Let them know they can't mess around
+													sys();
+												}
+											}
+										}
+										writefile(custList);
+									} else if (c2b.equals("d")) {
+										loggedin = false;
 									}
-								}
+									//sys();
+								} //sys();
 							}
-							writefile(custList);
-						} 
-						sys();
-					} 
+						} sys();
+					}
 				}
+				
+				//System.out.println(checkPwd);
+				//iterate over customer arraylist to check if username and password are correct
+		
 			} else {
 				System.out.println("Invalid input, try again.");
 				sys();
@@ -306,14 +320,16 @@ public class atm {
 				if(d1.equals("a")) { //View Accounts branch
 					for (int x=0; x < custList.size(); x++){
 						System.out.println(custList.get(x) + "\n");
-						sys();
+						
 					}
-					for(int i=0; i<custList.size(); i++) {
+					/*for(int i=0; i<custList.size(); i++) {
 						System.out.println(i+1 + ": " + custList.get(i));
-					}
+					}*/
+					sys();
 				} else if(d1.contentEquals("b")){ // Edit Accounts branch
 					System.out.println("Would you like to:"+ "\n" + "a) Approve/Deny Normal Accounts" + "\n" +
-									"b) Transaction" + "\n" +"c) Delete Accounts" + "\n" + "d) Approve/Deny Joint Accounts");
+									"b) Transaction" + "\n" +"c) Delete Accounts" + "\n" + "d) Approve/Deny Joint Accounts" + 
+									"\n" + "e) Create Accounts");
 					String d2 = s.nextLine();
 					if(d2.equals("a")) { //Approve/Deny Normal Accounts branch, same implementation as employee
 						System.out.println("List of Normal Accounts to be Approved:");
@@ -442,7 +458,26 @@ public class atm {
 		 					ba.denyJointApplication(JappList, n);
 		 					writeJA(JappList);
 		 				} 
-					}
+					} else if(d2.equals("e")) {
+						//asks for first name, last name, username, and password info
+						System.out.println("What is the customer's first name?");
+						String fname = s.nextLine();
+						System.out.println("What is the customer's last name?");
+						String lname = s.nextLine();
+						System.out.println("Create New Customer Username:");
+						String uname = s.nextLine();
+						System.out.println("Create Customer Password:");
+						//funds is set automatically to $10 because our policy required an amount greater than 0 to open an account
+						int funds = 10;
+						String pw = s.nextLine();
+						//create new application object and then add to apply list
+						custList.add(new Customer (fname,lname,uname,pw,funds)); 
+						//saves application to appplication.txt file
+						writefile(custList);
+						//Let the user know their application is waiting for approval
+						System.out.println("A new customer has been registered!");
+						sys(); //recall the system
+					} 
 					sys();
 				}	
 			} else { //protects bank admin account from users without knowledge of password
@@ -470,7 +505,9 @@ public class atm {
 	//serialize customer list
 	public void writefile(ArrayList<Customer> custList) {
 		try {
-        	FileOutputStream fos = new FileOutputStream("CustomerData.txt");
+			ArrayList<Customer> custys = new ArrayList<Customer>();
+			custys = custList;
+			FileOutputStream fos = new FileOutputStream("CustomerData.txt");
         	ObjectOutputStream oos = new ObjectOutputStream(fos);
         	oos.writeObject(custys);
         	System.out.println();
@@ -485,9 +522,11 @@ public class atm {
 	//serialize normal application list
 	public void writeApps(ArrayList<Application> appList) {
 		try {
-	    	FileOutputStream fos = new FileOutputStream("Applications.txt");
+			ArrayList<Application> apply = new ArrayList<Application>();
+			apply = appList;
+			FileOutputStream fos = new FileOutputStream("Applications.txt");
 	    	ObjectOutputStream oos = new ObjectOutputStream(fos);
-	    	oos.writeObject(appList);
+	    	oos.writeObject(apply);
 	    	System.out.println();
 	    	oos.close();
 	    	fos.close();
@@ -500,9 +539,11 @@ public class atm {
 	//serialize joint application list
 	public void writeJA(ArrayList<JointApp> JappList) {
 		try {
+			ArrayList<JointApp> Japps = new ArrayList<JointApp>();
+			Japps = JappList;
 			FileOutputStream fos = new FileOutputStream("Joint.txt");
 	    	ObjectOutputStream oos = new ObjectOutputStream(fos);
-	    	oos.writeObject(JappList);
+	    	oos.writeObject(Japps);
 	    	System.out.println();
 	    	oos.close();
 	    	fos.close();
